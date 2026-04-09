@@ -1,0 +1,176 @@
+.chartCard {
+  background: var(--bg-secondary);
+  border: 1px solid var(--border-color);
+  border-radius: var(--border-radius);
+  padding: var(--spacing-md);
+  box-shadow: var(--shadow-card);
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+}
+
+.chartTitle {
+  color: var(--text-primary);
+  font-size: var(--font-size-large);
+  font-weight: 600;
+  margin-bottom: var(--spacing-md);
+}
+
+.chartArea {
+  height: 350px;
+}
+
+/* 主趋势图标题行：标题 + 利润率指示器 */
+.chartTitleRow {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: var(--spacing-md);
+}
+
+.profitMarginIndicator {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-sm);
+  background: var(--bg-tertiary);
+  border: 1px solid var(--border-color);
+  border-radius: 6px;
+  padding: 4px 12px;
+  font-size: 13px;
+}
+
+.profitMarginLabel {
+  color: var(--text-secondary);
+  font-size: 12px;
+}
+
+.profitMarginValue {
+  color: var(--color-profit-margin);
+  font-weight: 700;
+  font-size: 16px;
+}
+
+.profitMarginTrend {
+  font-size: 14px;
+}
+
+.profitMarginTrendUp {
+  color: var(--color-up);
+}
+
+.profitMarginTrendDown {
+  color: var(--color-down);
+}
+
+.profitMarginTrendNeutral {
+  color: var(--color-neutral);
+}
+
+/* 套餐排行摘要卡片 */
+.summaryCards {
+  display: flex;
+  gap: var(--spacing-md);
+  margin-bottom: var(--spacing-md);
+}
+
+.summaryCard {
+  flex: 1;
+  background: var(--bg-tertiary);
+  border: 1px solid var(--border-color);
+  border-radius: 6px;
+  padding: var(--spacing-sm) var(--spacing-md);
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.summaryCardLabel {
+  color: var(--text-secondary);
+  font-size: 12px;
+}
+
+.summaryCardName {
+  color: var(--text-primary);
+  font-size: 14px;
+  font-weight: 600;
+}
+
+.summaryCardValue {
+  font-size: 16px;
+  font-weight: 700;
+}
+
+.summaryCardValueProfit {
+  color: var(--color-profit);
+}
+
+.summaryCardValueMargin {
+  color: var(--color-profit-margin);
+}
+
+.statusContainer {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 150px;
+  color: var(--text-secondary);
+  font-size: var(--font-size-normal);
+}
+
+.errorContainer {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  height: 150px;
+  gap: var(--spacing-sm);
+}
+
+.errorText {
+  color: var(--color-critical);
+  font-size: var(--font-size-normal);
+}
+
+.retryButton {
+  background: var(--bg-tertiary);
+  color: var(--text-primary);
+  border: 1px solid var(--border-color);
+  border-radius: 4px;
+  padding: var(--spacing-xs) var(--spacing-md);
+  cursor: pointer;
+  font-size: var(--font-size-small);
+}
+
+.retryButton:hover {
+  background: var(--bg-hover);
+}
+
+.controls {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-md);
+  margin-bottom: var(--spacing-sm);
+}
+
+.controlLabel {
+  color: var(--text-secondary);
+  font-size: var(--font-size-small);
+  white-space: nowrap;
+}
+
+.subChartsGrid {
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr;
+  gap: var(--spacing-md);
+}
+
+.subChartItem {
+  min-height: 0;
+}
+
+.subChartTitle {
+  color: var(--text-secondary);
+  font-size: var(--font-size-normal);
+  font-weight: 500;
+  margin-bottom: var(--spacing-sm);
+}

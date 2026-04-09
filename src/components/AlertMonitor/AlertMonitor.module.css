@@ -1,0 +1,97 @@
+.monitor {
+  background: var(--bg-secondary);
+  border: 1px solid var(--border-color);
+  border-radius: var(--border-radius);
+  padding: var(--spacing-md);
+  box-shadow: var(--shadow-card);
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+}
+
+.monitorTitle {
+  color: var(--text-primary);
+  font-size: var(--font-size-large);
+  font-weight: 600;
+  margin-bottom: var(--spacing-md);
+}
+
+.alertList {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-sm);
+  overflow-y: auto;
+  max-height: 480px;
+}
+
+.statusContainer {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 200px;
+  color: var(--text-secondary);
+  font-size: var(--font-size-normal);
+}
+
+.errorContainer {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  min-height: 200px;
+  gap: var(--spacing-sm);
+}
+
+.errorText {
+  color: var(--color-critical);
+  font-size: var(--font-size-normal);
+}
+
+.retryButton {
+  background: var(--bg-tertiary);
+  color: var(--text-primary);
+  border: 1px solid var(--border-color);
+  border-radius: 4px;
+  padding: var(--spacing-xs) var(--spacing-md);
+  cursor: pointer;
+  font-size: var(--font-size-small);
+}
+
+.retryButton:hover {
+  background: var(--bg-hover);
+}
+
+.emptyContainer {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  min-height: 200px;
+  color: var(--color-profit);
+  font-size: var(--font-size-normal);
+  gap: var(--spacing-sm);
+}
+
+.emptyIcon {
+  font-size: 32px;
+}
+
+.alertSummary {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  margin-bottom: 12px;
+}
+
+.alertSummaryItem {
+  font-size: 14px;
+  font-weight: 600;
+}
+
+.alertSummaryCritical {
+  color: var(--color-critical);
+}
+
+.alertSummaryWarning {
+  color: var(--color-warning);
+}

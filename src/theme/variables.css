@@ -1,0 +1,71 @@
+/* 深色驾驶舱主题 CSS 变量 */
+:root {
+  /* ===== 基础背景色 ===== */
+  --bg-primary: #0d1117;           /* 页面主背景 */
+  --bg-secondary: #161b22;         /* 卡片/模块背景 */
+  --bg-tertiary: #1c2333;          /* 输入框/下拉框背景 */
+  --bg-hover: #21262d;             /* 悬停态背景 */
+
+  /* ===== 文字色 ===== */
+  --text-primary: #e6edf3;         /* 主文字色 */
+  --text-secondary: #8b949e;       /* 次要文字色 */
+  --text-muted: #484f58;           /* 弱化文字色 */
+
+  /* ===== 业务语义色 ===== */
+  --color-revenue: #58a6ff;        /* 收入色（蓝色系） */
+  --color-revenue-light: #79c0ff;
+  --color-cost: #f0883e;           /* 成本色（橙色系） */
+  --color-cost-light: #f5a623;
+  --color-profit: #3fb950;         /* 利润色（绿色系） */
+  --color-profit-light: #56d364;
+  --color-profit-margin: #bc8cff;  /* 利润率（紫色系，右轴区分） */
+
+  /* ===== 成本结构细分色 ===== */
+  --color-server-cost: #f97583;
+  --color-traffic-cost: #f0883e;
+  --color-payment-fee: #d2a8ff;
+  --color-meari-share: #79c0ff;
+  --color-customer-share: #56d364;
+
+  --color-card-fee: #d4a373;
+  --color-sales: #e6c07b;
+
+  /* ===== 收入结构色 ===== */
+  --color-meari-revenue: #58a6ff;
+  --color-customer-revenue: #3fb950;
+
+  /* ===== 告警色 ===== */
+  --color-critical: #f85149;       /* 严重告警（红色） */
+  --color-critical-bg: rgba(248, 81, 73, 0.1);
+  --color-warning: #f0883e;        /* 一般告警（橙色） */
+  --color-warning-bg: rgba(240, 136, 62, 0.1);
+
+  /* ===== 环比变化指示色 ===== */
+  --color-up: #3fb950;             /* 正值/上升（绿色） */
+  --color-down: #f85149;           /* 负值/下降（红色） */
+  --color-neutral: #8b949e;        /* 零值/中性 */
+
+  /* ===== 字号变量 ===== */
+  --font-size-kpi: 26px;           /* KPI 突出数值字号 */
+  --font-size-kpi-highlighted: 30px; /* KPI 强调数值字号 */
+  --font-size-kpi-label: 14px;     /* KPI 标签字号 */
+  --font-size-page-title: 22px;    /* 页面标题字号 */
+  --font-size-module-title: 18px;  /* 模块标题字号 */
+  --font-size-large: 20px;         /* 大号字体 */
+  --font-size-normal: 14px;        /* 普通正文字号 */
+  --font-size-small: 12px;         /* 辅助说明字号 */
+
+  /* ===== 边框与分割线 ===== */
+  --border-color: #30363d;
+  --border-radius: 8px;
+
+  /* ===== 阴影 ===== */
+  --shadow-card: 0 1px 4px rgba(0, 0, 0, 0.2);
+
+  /* ===== 间距 ===== */
+  --spacing-xs: 4px;
+  --spacing-sm: 8px;
+  --spacing-md: 16px;
+  --spacing-lg: 24px;
+  --spacing-xl: 32px;
+}

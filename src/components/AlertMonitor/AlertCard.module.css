@@ -1,0 +1,102 @@
+.alertCard {
+  background: var(--bg-secondary);
+  border: 1px solid var(--border-color);
+  border-radius: var(--border-radius);
+  padding: var(--spacing-sm) var(--spacing-md);
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-xs);
+  position: relative;
+  overflow: hidden;
+}
+
+.alertCard::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 4px;
+  height: 100%;
+}
+
+.critical {
+  border-color: var(--color-critical);
+  background: var(--color-critical-bg);
+}
+
+.critical::before {
+  background: var(--color-critical);
+}
+
+.warning {
+  border-color: var(--color-warning);
+  background: var(--color-warning-bg);
+}
+
+.warning::before {
+  background: var(--color-warning);
+}
+
+.header {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-sm);
+}
+
+.severityBadge {
+  font-size: var(--font-size-small);
+  font-weight: 600;
+  padding: 2px 8px;
+  border-radius: 4px;
+  text-transform: uppercase;
+  white-space: nowrap;
+}
+
+.badgeCritical {
+  color: var(--color-critical);
+  background: rgba(248, 81, 73, 0.2);
+}
+
+.badgeWarning {
+  color: var(--color-warning);
+  background: rgba(240, 136, 62, 0.2);
+}
+
+.title {
+  color: var(--text-primary);
+  font-size: var(--font-size-normal);
+  font-weight: 600;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.detail {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-xs);
+}
+
+.detailRow {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  font-size: var(--font-size-small);
+}
+
+.detailLabel {
+  color: var(--text-secondary);
+}
+
+.detailValue {
+  color: var(--text-primary);
+  font-weight: 500;
+}
+
+.changeValue {
+  font-weight: 600;
+}
+
+.changeUp {
+  color: var(--color-down);
+}

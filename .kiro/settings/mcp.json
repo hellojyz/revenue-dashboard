@@ -1,0 +1,12 @@
+{
+  "mcpServers": {
+    "mui": {
+      "type": "stdio",
+      "command": "npx.cmd",
+      "args": ["-y", "@mui/mcp@latest"],
+      "env": {
+        "PATH": "C:\\Program Files\\nodejs;${env:PATH}"
+      }
+    }
+  }
+}

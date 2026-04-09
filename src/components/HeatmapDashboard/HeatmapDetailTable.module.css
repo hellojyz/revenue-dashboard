@@ -1,0 +1,54 @@
+.container {
+  background: #fff;
+  border: 1px solid #e8e8e8;
+  border-radius: 8px;
+  padding: 16px 24px;
+}
+
+.header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 12px;
+}
+
+.title {
+  font-size: 16px;
+  font-weight: 600;
+  color: #333;
+}
+
+.exportBtns {
+  display: flex;
+  gap: 8px;
+}
+
+.highlightedRow {
+  background: #e6f4ff !important;
+}
+
+.highlightedRow td {
+  background: #e6f4ff !important;
+}
+
+.riskCritical {
+  color: #cf1322;
+  font-weight: 600;
+}
+
+.riskWarning {
+  color: #d48806;
+  font-weight: 600;
+}
+
+.riskNormal {
+  color: #389e0d;
+}
+
+.riskExcellent {
+  color: #1677ff;
+}
+
+.nullValue {
+  color: #bfbfbf;
+}
