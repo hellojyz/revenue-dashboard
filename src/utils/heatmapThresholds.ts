@@ -45,17 +45,22 @@ export const METRIC_LABELS: Record<HeatmapMetricKey, string> = {
 /** 设备类型标签 */
 export const DEVICE_TYPE_LABELS: Record<string, string> = {
   all: '全部',
-  phone: '手机',
-  tablet: '平板',
-  smart_hardware: '智能硬件',
+  '4g_camera': '4G摄像机',
+  battery_camera: '电池摄像机',
+  wired_camera: '常电摄像机',
+  doorbell: '访客门铃',
+  light: '灯具',
+  mini_camera: '迷你摄像机',
 };
 
 /** 套餐类型标签 */
 export const PACKAGE_TYPE_LABELS: Record<string, string> = {
   all: '全部',
-  basic: '基础',
-  advanced: '进阶',
-  premium: '高级',
+  yearly: '年包',
+  monthly: '月包',
+  half_yearly: '半年包',
+  quarterly: '季包',
+  daily: '天',
 };
 
 /** 时间周期标签 */
@@ -65,6 +70,29 @@ export const TIME_PERIOD_LABELS: Record<string, string> = {
   natural_month: '自然月',
   custom: '自定义',
 };
+
+/** APP名称列表 */
+export const APP_NAME_OPTIONS: { value: string; label: string }[] = [
+  { value: 'all', label: '全部' },
+  { value: 'ANRAN', label: 'ANRAN' },
+  { value: 'Cococam', label: 'Cococam' },
+  { value: 'ieGeek Cam', label: 'ieGeek Cam' },
+  { value: 'Meari', label: 'Meari' },
+  { value: 'Arenti', label: 'Arenti' },
+  { value: 'COOAU', label: 'COOAU' },
+  { value: 'Ctronics', label: 'Ctronics' },
+  { value: 'ZOSI', label: 'ZOSI' },
+  { value: 'Hiseeu', label: 'Hiseeu' },
+  { value: 'GALAYOU', label: 'GALAYOU' },
+  { value: 'DEKCO', label: 'DEKCO' },
+  { value: 'FloodLight Cam', label: 'FloodLight Cam' },
+  { value: 'BabyMonitor', label: 'BabyMonitor' },
+  { value: 'PetCam', label: 'PetCam' },
+  { value: 'SolarCam', label: 'SolarCam' },
+  { value: 'DoorBell Pro', label: 'DoorBell Pro' },
+  { value: 'PTZ Outdoor', label: 'PTZ Outdoor' },
+  { value: 'Mini Indoor', label: 'Mini Indoor' },
+];
 
 // ============================================================
 // 指标键列表（固定顺序）

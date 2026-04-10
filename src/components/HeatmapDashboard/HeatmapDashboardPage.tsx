@@ -2,6 +2,7 @@ import { useMemo } from 'react';
 import { useHeatmapStore } from '../../store/useHeatmapStore';
 import { useHeatmapData } from '../../hooks/useHeatmapData';
 import HeatmapFilterBar from './HeatmapFilterBar';
+import HeatmapKPICards from './HeatmapKPICards';
 import HeatmapAlertMonitor from './HeatmapAlertMonitor';
 import HeatmapChart from './HeatmapChart';
 import HeatmapDetailTable from './HeatmapDetailTable';
@@ -59,6 +60,10 @@ export default function HeatmapDashboardPage() {
           <EmptyState />
         ) : (
           <>
+            <ErrorBoundary>
+              <HeatmapKPICards data={apps} />
+            </ErrorBoundary>
+
             <ErrorBoundary>
               <HeatmapAlertMonitor data={apps} filters={filters} />
             </ErrorBoundary>

@@ -8,6 +8,8 @@ import {
   formatMetricDisplay,
   DEFAULT_HEATMAP_THRESHOLDS,
   METRIC_LABELS,
+  DEVICE_TYPE_LABELS,
+  PACKAGE_TYPE_LABELS,
 } from '../../utils/heatmapThresholds';
 import type {
   HeatmapAppMetric,
@@ -131,6 +133,44 @@ export default function HeatmapDetailTable({ data }: Props) {
             : undefined,
         render: metricRender('revenuePerDevice'),
       },
+      {
+        title: '设备类型',
+        dataIndex: 'deviceType',
+        key: 'deviceType',
+        width: 120,
+        render: (val: string) => DEVICE_TYPE_LABELS[val] ?? val,
+      },
+      {
+        title: '套餐类型',
+        dataIndex: 'packageType',
+        key: 'packageType',
+        width: 100,
+        render: (val: string) => PACKAGE_TYPE_LABELS[val] ?? val,
+      },
+      {
+        title: '指标风险标记',
+        key: 'riskMark',
+        width: 120,
+        render: (_: unknown, record: HeatmapAppMetric) => {
+          const metricKeys: HeatmapMetricKey[] = [
+            'deviceCount',
+            'subscriptionConversionRate',
+            'subscriptionRetentionRate',
+            'revenuePerDevice',
+          ];
+          let worstLevel: 'normal' | 'warning' | 'critical' = 'normal';
+          for (const key of metricKeys) {
+            const val = record[key];
+            if (val === null || val === undefined) continue;
+            const level = getColorLevel(val, key, DEFAULT_HEATMAP_THRESHOLDS);
+            if (level === 'critical') { worstLevel = 'critical'; break; }
+            if (level === 'warning') worstLevel = 'warning';
+          }
+          if (worstLevel === 'critical') return <span className={styles.riskCritical}>🔴严重</span>;
+          if (worstLevel === 'warning') return <span className={styles.riskWarning}>🟠预警</span>;
+          return <span className={styles.riskNormal}>🟢正常</span>;
+        },
+      },
     ],
     [sortConfig],
   );
@@ -148,7 +188,7 @@ export default function HeatmapDetailTable({ data }: Props) {
 
   const exportToCSV = useCallback(
     (rows: HeatmapAppMetric[], filename: string) => {
-      const header = ['APP名称', '设备数', '转化率', '留存率', '单设备收益'];
+      const header = ['APP名称', '设备数', '转化率', '留存率', '单设备收益', '设备类型', '套餐类型'];
       const csvRows = [header.join(',')];
       for (const row of rows) {
         csvRows.push(
@@ -158,6 +198,8 @@ export default function HeatmapDetailTable({ data }: Props) {
             formatMetricDisplay(row.subscriptionConversionRate, 'subscriptionConversionRate'),
             formatMetricDisplay(row.subscriptionRetentionRate, 'subscriptionRetentionRate'),
             formatMetricDisplay(row.revenuePerDevice, 'revenuePerDevice'),
+            DEVICE_TYPE_LABELS[row.deviceType] ?? row.deviceType,
+            PACKAGE_TYPE_LABELS[row.packageType] ?? row.packageType,
           ].join(','),
         );
       }
@@ -222,7 +264,7 @@ export default function HeatmapDetailTable({ data }: Props) {
         rowKey="appName"
         size="small"
         sticky
-        scroll={{ x: 750 }}
+        scroll={{ x: 1100 }}
         pagination={pagination}
         onChange={handleTableChange}
         onRow={(record) => ({

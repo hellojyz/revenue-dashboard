@@ -1,0 +1,44 @@
+.container {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 16px;
+}
+
+.card {
+  background: #fff;
+  border: 1px solid #e8e8e8;
+  border-radius: 8px;
+  padding: 20px 24px;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.label {
+  font-size: 13px;
+  color: #666;
+}
+
+.value {
+  font-size: 28px;
+  font-weight: 700;
+  color: #333;
+}
+
+.change {
+  font-size: 12px;
+  display: flex;
+  gap: 12px;
+}
+
+.up {
+  color: #cf1322;
+}
+
+.down {
+  color: #389e0d;
+}
+
+.flat {
+  color: #999;
+}

@@ -17,6 +17,7 @@ function delay(ms = 300): Promise<void> {
 
 function filtersToParams(filters: HeatmapFilters): Record<string, string> {
   const params: Record<string, string> = {
+    appName: filters.appName,
     deviceType: filters.deviceType,
     packageType: filters.packageType,
     timePeriod: filters.timePeriod,
@@ -33,8 +34,13 @@ export async function fetchHeatmapData(
 ): Promise<HeatmapDataResponse> {
   if (USE_MOCK) {
     await delay();
+    let apps = mockHeatmapData.apps;
+    // Filter by appName
+    if (filters.appName && filters.appName !== 'all') {
+      apps = apps.filter((a) => a.appName === filters.appName);
+    }
     return {
-      ...mockHeatmapData,
+      apps,
       updatedAt: new Date().toISOString(),
     };
   }

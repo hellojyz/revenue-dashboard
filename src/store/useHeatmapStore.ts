@@ -27,6 +27,7 @@ export interface HeatmapStore {
 }
 
 export const defaultHeatmapFilters: HeatmapFilters = {
+  appName: 'all',
   deviceType: 'all',
   packageType: 'all',
   timePeriod: 'last_30_days',

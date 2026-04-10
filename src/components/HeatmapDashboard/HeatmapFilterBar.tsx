@@ -7,6 +7,7 @@ import {
   DEVICE_TYPE_LABELS,
   PACKAGE_TYPE_LABELS,
   TIME_PERIOD_LABELS,
+  APP_NAME_OPTIONS,
 } from '../../utils/heatmapThresholds';
 import type { HeatmapFilters, DeviceType, PackageType, TimePeriod } from '../../types/heatmap';
 import styles from './HeatmapFilterBar.module.css';
@@ -34,6 +35,10 @@ export default function HeatmapFilterBar() {
   const resetFilters = useHeatmapStore((s) => s.resetFilters);
 
   const [local, setLocal] = useState<HeatmapFilters>({ ...defaultHeatmapFilters });
+
+  const handleAppName = useCallback((v: string) => {
+    setLocal((prev) => ({ ...prev, appName: v }));
+  }, []);
 
   const handleDeviceType = useCallback((v: DeviceType) => {
     setLocal((prev) => ({ ...prev, deviceType: v }));
@@ -70,6 +75,18 @@ export default function HeatmapFilterBar() {
 
   return (
     <div className={styles.filterBar}>
+      <div className={styles.filterItem}>
+        <span className={styles.filterLabel}>APP</span>
+        <Select
+          value={local.appName}
+          onChange={handleAppName}
+          options={APP_NAME_OPTIONS}
+          style={{ width: 160 }}
+          showSearch
+          optionFilterProp="label"
+        />
+      </div>
+
       <div className={styles.filterItem}>
         <span className={styles.filterLabel}>设备类型</span>
         <Select

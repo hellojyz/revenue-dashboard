@@ -51,9 +51,9 @@ export default function HeatmapAlertMonitor({ data, filters }: Props) {
     return (
       <div className={styles.container}>
         <div className={styles.header}>
-          <span className={styles.title}>异常告警预警</span>
+          <span className={styles.title}>⚠️ 增值订阅指标风险告警 & 智能归因分析</span>
         </div>
-        <div className={styles.emptyAlert}>当前筛选条件下无异常告警</div>
+        <div className={styles.emptyAlert}>【正常平稳】其余APP核心指标均在安全阈值区间，无异常波动</div>
       </div>
     );
   }
@@ -104,7 +104,7 @@ export default function HeatmapAlertMonitor({ data, filters }: Props) {
     <div className={styles.container}>
       <div className={styles.header}>
         <span className={styles.title}>
-          异常告警预警
+          ⚠️ 增值订阅指标风险告警 & 智能归因分析
           {criticalCount > 0 && (
             <span className={`${styles.badge} ${styles.badgeCritical}`}>
               严重 {criticalCount}

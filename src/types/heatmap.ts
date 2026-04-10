@@ -7,10 +7,10 @@
 // ============================================================
 
 /** 设备类型 */
-export type DeviceType = 'all' | 'phone' | 'tablet' | 'smart_hardware';
+export type DeviceType = 'all' | '4g_camera' | 'battery_camera' | 'wired_camera' | 'doorbell' | 'light' | 'mini_camera';
 
 /** 套餐类型 */
-export type PackageType = 'all' | 'basic' | 'advanced' | 'premium';
+export type PackageType = 'all' | 'yearly' | 'monthly' | 'half_yearly' | 'quarterly' | 'daily';
 
 /** 时间周期 */
 export type TimePeriod = 'last_7_days' | 'last_30_days' | 'natural_month' | 'custom';
@@ -40,6 +40,7 @@ export type AttributionTemplateMap = Record<HeatmapMetricKey, AttributionDirecti
 
 /** 热力图筛选条件 */
 export interface HeatmapFilters {
+  appName: string;           // 'all' 或具体APP名称
   deviceType: DeviceType;
   packageType: PackageType;
   timePeriod: TimePeriod;
