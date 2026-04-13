@@ -1,5 +1,6 @@
 import { useQuery } from '@tanstack/react-query';
 import { useDashboardStore } from '../store/useDashboardStore';
+import { useI18n } from '../i18n/I18nContext';
 import {
   fetchKPI,
   fetchMainTrend,
@@ -95,8 +96,9 @@ export function useCostDetailData() {
 
 export function useAlertData() {
   const filters = useDashboardStore((s) => s.filters);
+  const { locale } = useI18n();
   return useQuery({
-    queryKey: ['alerts', filtersToKey(filters)],
+    queryKey: ['alerts', filtersToKey(filters), locale],
     queryFn: () => fetchAlerts(filters),
     retry: RETRY_COUNT,
   });

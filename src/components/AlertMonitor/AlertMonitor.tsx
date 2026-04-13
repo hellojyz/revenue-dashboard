@@ -1,5 +1,6 @@
 import { useAlertData } from '../../hooks/useDashboardData';
 import { sortAlerts } from '../../utils/alertRules';
+import { useI18n } from '../../i18n/I18nContext';
 import AlertCard from './AlertCard';
 import styles from './AlertMonitor.module.css';
 
@@ -11,6 +12,7 @@ const TOP_N = 5;
  * 调用 sortAlerts 排序后展示 Top N 告警卡片列表
  */
 const AlertMonitor: React.FC = () => {
+  const { t } = useI18n();
   const { data, isLoading, isError, refetch } = useAlertData();
 
   const allAlerts = data?.alerts ? sortAlerts(data.alerts) : [];
@@ -20,32 +22,32 @@ const AlertMonitor: React.FC = () => {
 
   return (
     <div className={styles.monitor}>
-      <div className={styles.monitorTitle}>预测异常监控告警</div>
+      <div className={styles.monitorTitle}>{t.alertMonitorTitle}</div>
       {isLoading && (
-        <div className={styles.statusContainer}>加载中...</div>
+        <div className={styles.statusContainer}>{t.loading}</div>
       )}
       {isError && (
         <div className={styles.errorContainer}>
-          <span className={styles.errorText}>告警数据加载失败</span>
+          <span className={styles.errorText}>{t.alertLoadFailed}</span>
           <button className={styles.retryButton} onClick={() => refetch()}>
-            重试
+            {t.retry}
           </button>
         </div>
       )}
       {!isLoading && !isError && sortedAlerts.length === 0 && (
         <div className={styles.emptyContainer}>
           <span className={styles.emptyIcon}>✓</span>
-          <span>当前无异常</span>
+          <span>{t.noAlerts}</span>
         </div>
       )}
       {!isLoading && !isError && sortedAlerts.length > 0 && (
         <>
           <div className={styles.alertSummary}>
             <span className={`${styles.alertSummaryItem} ${styles.alertSummaryCritical}`}>
-              严重 {criticalCount} 条
+              {t.severeCN} {criticalCount} {t.items}
             </span>
             <span className={`${styles.alertSummaryItem} ${styles.alertSummaryWarning}`}>
-              警告 {warningCount} 条
+              {t.warningCN} {warningCount} {t.items}
             </span>
           </div>
           <div className={styles.alertList}>

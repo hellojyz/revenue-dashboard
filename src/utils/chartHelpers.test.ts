@@ -153,8 +153,8 @@ describe('buildWaterfallOption', () => {
     const opt = buildWaterfallOption(data);
     const series = getSeries(opt);
     expect(series).toHaveLength(2);
-    expect(series[0].name).toBe('透明底座');
-    expect(series[1].name).toBe('数值');
+    expect(series[0].name).toBe('_transparent_base');
+    expect(series[1].name).toBe('_values');
   });
 
   it('has 8 data points (revenue + 6 costs + profit)', () => {

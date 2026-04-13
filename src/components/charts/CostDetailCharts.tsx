@@ -1,10 +1,11 @@
-import { useState } from 'react';
+import { useState, useMemo } from 'react';
 import { Radio } from 'antd';
 import type { RadioChangeEvent } from 'antd';
 import ReactECharts from 'echarts-for-react';
 import { useDashboardStore } from '../../store/useDashboardStore';
 import { useCostDetailData } from '../../hooks/useDashboardData';
 import { formatCurrency } from '../../utils/formatters';
+import { useI18n } from '../../i18n/I18nContext';
 import styles from './ChartCard.module.css';
 
 const COLORS = {
@@ -20,12 +21,6 @@ const COLORS = {
   textPrimary: '#e6edf3',
 };
 
-const GRANULARITY_SUBTITLE: Record<string, string> = {
-  week: '近8周趋势',
-  month: '近6个月趋势',
-};
-
-// 供应商数据比例（模拟不同供应商占比）
 const SUPPLIER_RATIOS: Record<string, { traffic4G: number; cardFee: number }> = {
   all: { traffic4G: 1, cardFee: 1 },
   lingke: { traffic4G: 0.45, cardFee: 0.40 },
@@ -33,7 +28,6 @@ const SUPPLIER_RATIOS: Record<string, { traffic4G: number; cardFee: number }> = 
   mobile: { traffic4G: 0.25, cardFee: 0.25 },
 };
 
-// 支付渠道比例（模拟不同支付渠道占比）
 const PAYMENT_CHANNEL_RATIOS: Record<string, number> = {
   all: 1,
   apple: 0.35,
@@ -59,6 +53,7 @@ function buildSubChartOption(
   seriesList: Array<{ name: string; data: number[]; color: string }>,
   dateRanges?: string[],
   forecastStartIndex?: number,
+  historyForecastMarkLabel?: string,
 ): Record<string, unknown> {
   const fsi = forecastStartIndex;
   const hasForecast = fsi != null && fsi > 0 && fsi < dates.length;
@@ -85,7 +80,7 @@ function buildSubChartOption(
           lineStyle: { color: 'rgba(255, 255, 255, 0.35)', type: [4, 4], width: 1.5 },
           label: {
             show: true,
-            formatter: '← 历史 | 预测 →',
+            formatter: historyForecastMarkLabel ?? '← 历史 | 预测 →',
             color: 'rgba(255, 255, 255, 0.6)',
             fontSize: 10,
             fontWeight: 500,
@@ -162,11 +157,17 @@ function buildSubChartOption(
 }
 
 const CostDetailCharts: React.FC = () => {
+  const { t } = useI18n();
   const { data, isLoading, isError, refetch } = useCostDetailData();
   const timeGranularity = useDashboardStore((s) => s.filters.timeGranularity);
   const isDailyGranularity = timeGranularity === 'day';
   const [supplier, setSupplier] = useState<string>('all');
   const [expandedCost, setExpandedCost] = useState<string | null>(null);
+
+  const GRANULARITY_SUBTITLE: Record<string, string> = useMemo(() => ({
+    week: t.last8weeks,
+    month: t.last6months,
+  }), [t]);
 
   const hasDates = data?.dates && data.dates.length > 0;
   const ranges = data?.dateRanges;
@@ -182,12 +183,14 @@ const CostDetailCharts: React.FC = () => {
     apple: '#f85149', google: '#3fb950', paypal: '#58a6ff',
     wechat: '#3fb950', alipay: '#58a6ff', airwallex: '#e6c07b',
   };
-  const channelLabels: Record<string, string> = {
-    apple: '苹果', google: '谷歌', paypal: 'PayPal',
-    wechat: '微信', alipay: '支付宝', airwallex: '空中云汇',
-  };
+
+  const channelLabels: Record<string, string> = useMemo(() => ({
+    apple: t.apple, google: t.google, paypal: 'PayPal',
+    wechat: t.wechat, alipay: t.alipay, airwallex: t.airwallex,
+  }), [t]);
+
   const paymentFeeSeries = hasDates ? [
-    { name: '全部渠道', data: data!.paymentFee, color: COLORS.paymentFee },
+    { name: t.allChannels, data: data!.paymentFee, color: COLORS.paymentFee },
     ...Object.entries(PAYMENT_CHANNEL_RATIOS)
       .filter(([k]) => k !== 'all')
       .map(([k, r]) => ({
@@ -198,61 +201,61 @@ const CostDetailCharts: React.FC = () => {
   ] : [];
 
   const paymentFeeOption = hasDates
-    ? buildSubChartOption(data!.dates, paymentFeeSeries, ranges, fsi)
+    ? buildSubChartOption(data!.dates, paymentFeeSeries, ranges, fsi, t.historyForecastMark)
     : {};
 
   const trafficCostOption = hasDates && !isDailyGranularity
     ? buildSubChartOption(data!.dates, [
-        { name: '4G卡流量', data: traffic4GData, color: COLORS.trafficCost4G },
-        { name: '4G卡费', data: cardFeeData, color: COLORS.cardFeeCost },
-      ], ranges, fsi)
+        { name: t.traffic4GLabel, data: traffic4GData, color: COLORS.trafficCost4G },
+        { name: t.cardFeeLabel, data: cardFeeData, color: COLORS.cardFeeCost },
+      ], ranges, fsi, t.historyForecastMark)
     : {};
 
   const shareCostOption = hasDates
     ? buildSubChartOption(data!.dates, [
-        { name: '觅睿分成', data: data!.meariShareCost, color: COLORS.meariShare },
-        { name: '客户分成', data: data!.customerShareCost, color: COLORS.customerShare },
-      ], ranges, fsi)
+        { name: t.meariShare, data: data!.meariShareCost, color: COLORS.meariShare },
+        { name: t.customerShare, data: data!.customerShareCost, color: COLORS.customerShare },
+      ], ranges, fsi, t.historyForecastMark)
     : {};
 
   const trafficCost4GMonthly = traffic4GData.reduce((a, b) => a + b, 0);
   const cardFeeCostMonthly = cardFeeData.reduce((a, b) => a + b, 0);
 
-  const supplierLabel = supplier === 'all' ? '' : supplier === 'lingke' ? '（领科）' : supplier === 'telecom' ? '（电信）' : '（移动）';
+  const supplierLabel = supplier === 'all' ? '' : supplier === 'lingke' ? `（${t.supplierLingke}）` : supplier === 'telecom' ? `（${t.supplierTelecom}）` : `（${t.supplierMobile}）`;
 
   return (
     <div className={styles.chartCard}>
       <div className={styles.chartTitle}>
-        成本预测专项分析
+        {t.costDetailTitle}
         {GRANULARITY_SUBTITLE[timeGranularity] && (
           <span style={{ fontSize: 12, color: COLORS.textSecondary, marginLeft: 8 }}>
             （{GRANULARITY_SUBTITLE[timeGranularity]}）
           </span>
         )}
       </div>
-      {isLoading && <div className={styles.statusContainer}>加载中...</div>}
+      {isLoading && <div className={styles.statusContainer}>{t.loading}</div>}
       {isError && (
         <div className={styles.errorContainer}>
-          <span className={styles.errorText}>数据加载失败</span>
-          <button className={styles.retryButton} onClick={() => refetch()}>重试</button>
+          <span className={styles.errorText}>{t.loadFailed}</span>
+          <button className={styles.retryButton} onClick={() => refetch()}>{t.retry}</button>
         </div>
       )}
-      {!isLoading && !isError && !hasDates && <div className={styles.statusContainer}>暂无数据</div>}
+      {!isLoading && !isError && !hasDates && <div className={styles.statusContainer}>{t.noData}</div>}
       {!isLoading && !isError && hasDates && (
         <>
         <div className={styles.subChartsGrid}>
           <div className={styles.subChartItem}>
-            <div className={styles.subChartTitle}>支付平台手续费预测趋势（按渠道）</div>
+            <div className={styles.subChartTitle}>{t.paymentFeeTrend}</div>
             <ReactECharts option={paymentFeeOption} style={{ width: '100%', height: 260 }} opts={{ renderer: 'canvas' }} />
           </div>
           <div className={styles.subChartItem}>
-            <div className={styles.subChartTitle}>分成成本预测趋势</div>
+            <div className={styles.subChartTitle}>{t.shareCostTrend}</div>
             <ReactECharts option={shareCostOption} style={{ width: '100%', height: 260 }} opts={{ renderer: 'canvas' }} />
           </div>
           <div className={styles.subChartItem}>
             <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: 8 }}>
               <div className={styles.subChartTitle} style={{ marginBottom: 0 }}>
-                流量成本预测{isDailyGranularity ? '（月度汇总）' : '趋势'}{supplierLabel}
+                {t.trafficCostTitle}{isDailyGranularity ? t.monthlyTotal : t.trendSuffix}{supplierLabel}
               </div>
               <Radio.Group
                 value={supplier}
@@ -261,10 +264,10 @@ const CostDetailCharts: React.FC = () => {
                 optionType="button"
                 buttonStyle="solid"
                 options={[
-                  { label: '全部', value: 'all' },
-                  { label: '领科', value: 'lingke' },
-                  { label: '电信', value: 'telecom' },
-                  { label: '移动', value: 'mobile' },
+                  { label: t.supplierAll, value: 'all' },
+                  { label: t.supplierLingke, value: 'lingke' },
+                  { label: t.supplierTelecom, value: 'telecom' },
+                  { label: t.supplierMobile, value: 'mobile' },
                 ]}
               />
             </div>
@@ -272,11 +275,11 @@ const CostDetailCharts: React.FC = () => {
               <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', height: 230, gap: 24 }}>
                 <div style={{ textAlign: 'center' }}>
                   <div style={{ fontSize: 24, fontWeight: 700, color: COLORS.trafficCost4G }}>{formatCurrency(trafficCost4GMonthly)}</div>
-                  <div style={{ fontSize: 12, color: COLORS.textSecondary, marginTop: 4 }}>4G卡流量</div>
+                  <div style={{ fontSize: 12, color: COLORS.textSecondary, marginTop: 4 }}>{t.traffic4GLabel}</div>
                 </div>
                 <div style={{ textAlign: 'center' }}>
                   <div style={{ fontSize: 24, fontWeight: 700, color: COLORS.cardFeeCost }}>{formatCurrency(cardFeeCostMonthly)}</div>
-                  <div style={{ fontSize: 12, color: COLORS.textSecondary, marginTop: 4 }}>4G卡费</div>
+                  <div style={{ fontSize: 12, color: COLORS.textSecondary, marginTop: 4 }}>{t.cardFeeLabel}</div>
                 </div>
               </div>
             ) : (
@@ -288,11 +291,11 @@ const CostDetailCharts: React.FC = () => {
         <div style={{ padding: '12px 0 0' }}>
           <div style={{ display: 'flex', gap: 20, fontSize: 12, color: COLORS.textSecondary, flexWrap: 'wrap' }}>
             {[
-              { key: 'paymentFee', color: COLORS.paymentFee, label: '手续费预测', desc: '第三方支付渠道（苹果、谷歌、PayPal、微信、支付宝、空中云汇）按交易金额收取的手续费预测' },
-              { key: 'trafficCost4G', color: COLORS.trafficCost4G, label: '4G卡流量预测', desc: '4G设备产生的数据流量费用预测，按供应商（领科、电信、移动）分别计费' },
-              { key: 'cardFeeCost', color: COLORS.cardFeeCost, label: '4G卡费预测', desc: '4G SIM卡月租费用预测，按供应商（领科、电信、移动）分别计费' },
-              { key: 'meariShare', color: COLORS.meariShare, label: '觅睿分成预测', desc: '觅睿收款模式下平台方按约定比例收取的收入分成预测' },
-              { key: 'customerShare', color: COLORS.customerShare, label: '客户分成预测', desc: '客户收款模式下合作客户按约定比例收取的收入分成预测' },
+              { key: 'paymentFee', color: COLORS.paymentFee, label: t.paymentFeeLabel },
+              { key: 'trafficCost4G', color: COLORS.trafficCost4G, label: t.traffic4GForecast },
+              { key: 'cardFeeCost', color: COLORS.cardFeeCost, label: t.cardFeeForecast },
+              { key: 'meariShare', color: COLORS.meariShare, label: t.meariShareForecast },
+              { key: 'customerShare', color: COLORS.customerShare, label: t.customerShareForecast },
             ].map((item) => (
               <div
                 key={item.key}
@@ -316,11 +319,11 @@ const CostDetailCharts: React.FC = () => {
               lineHeight: 1.6,
             }}>
               {[
-                { key: 'paymentFee', desc: '第三方支付渠道（苹果、谷歌、PayPal、微信、支付宝、空中云汇）按交易金额收取的手续费预测。不同渠道费率不同，可通过上方支付渠道按钮切换查看。' },
-                { key: 'trafficCost4G', desc: '4G设备产生的数据流量费用预测。按供应商（领科、电信、移动）分别计费，仅支持月度统计口径，日粒度下展示月度汇总。' },
-                { key: 'cardFeeCost', desc: '4G SIM卡月租费用预测。按供应商（领科、电信、移动）分别计费，与流量成本共同构成4G设备运营成本。' },
-                { key: 'meariShare', desc: '觅睿收款模式下，平台方按约定比例从可确认收入中收取的分成成本预测。分成比例与套餐类型和合作协议相关。' },
-                { key: 'customerShare', desc: '客户收款模式下，合作客户按约定比例从可确认收入中收取的分成成本预测。分成比例与客户协议相关。' },
+                { key: 'paymentFee', desc: t.paymentFeeDesc },
+                { key: 'trafficCost4G', desc: t.traffic4GDesc },
+                { key: 'cardFeeCost', desc: t.cardFeeDesc },
+                { key: 'meariShare', desc: t.meariShareDesc },
+                { key: 'customerShare', desc: t.customerShareDesc },
               ].find((i) => i.key === expandedCost)?.desc}
             </div>
           )}

@@ -1,6 +1,7 @@
 import { useMemo } from 'react';
 import { useHeatmapStore } from '../../store/useHeatmapStore';
 import { useHeatmapData } from '../../hooks/useHeatmapData';
+import { useI18n } from '../../i18n/I18nContext';
 import HeatmapFilterBar from './HeatmapFilterBar';
 import HeatmapKPICards from './HeatmapKPICards';
 import HeatmapAlertMonitor from './HeatmapAlertMonitor';
@@ -25,6 +26,7 @@ function formatUpdatedAt(isoStr: string | null): string {
 export default function HeatmapDashboardPage() {
   const filters = useHeatmapStore((s) => s.filters);
   const { data, isLoading, isError, updatedAt } = useHeatmapData();
+  const { t } = useI18n();
 
   const apps = useMemo(() => data?.apps ?? [], [data]);
 
@@ -48,8 +50,8 @@ export default function HeatmapDashboardPage() {
 
   return (
     <div className={styles.page}>
-      <div className={styles.pageTitle}>APP核心指标热力图看板</div>
-      {updatedAt && <div className={styles.updatedAt}>{formatUpdatedAt(updatedAt)}</div>}
+      <div className={styles.pageTitle}>{t.heatmapTitle}</div>
+      {updatedAt && <div className={styles.updatedAt}>{t.dataUpdateTime}：{formatUpdatedAt(updatedAt).replace('数据更新时间：', '')}</div>}
 
       <div className={styles.modules}>
         <ErrorBoundary>

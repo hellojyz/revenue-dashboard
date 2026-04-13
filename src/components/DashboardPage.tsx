@@ -9,6 +9,7 @@ import PackageProfitRanking from './charts/PackageProfitRanking';
 import CostDetailCharts from './charts/CostDetailCharts';
 import AlertMonitor from './AlertMonitor/AlertMonitor';
 import ErrorBoundary from './common/ErrorBoundary';
+import { useI18n } from '../i18n/I18nContext';
 import styles from './DashboardPage.module.css';
 
 /**
@@ -17,65 +18,67 @@ import styles from './DashboardPage.module.css';
  * 每个图表组件使用 ErrorBoundary 包裹
  */
 const DashboardPage: React.FC = () => {
+  const { t } = useI18n();
+
   return (
     <div className={styles.dashboard}>
-      <h1 className={styles.pageTitle}>可确认收入&amp;利润预测经营看板</h1>
+      <h1 className={styles.pageTitle}>{t.dashboardTitle}</h1>
       <p className={styles.pageSubtitle}>
-        说明：本看板中的销售额预测反映订单成交规模预测；可确认收入预测反映基于服务生效与确认规则，在当前统计周期预计可确认为收入的金额。由于增值类服务存在跨期确认特性，可确认收入预测不等于销售额预测。
+        {t.dashboardSubtitle}
       </p>
 
       {/* FilterBar */}
-      <ErrorBoundary fallbackTitle="筛选栏加载异常">
+      <ErrorBoundary fallbackTitle={t.filterBarError}>
         <FilterBar />
       </ErrorBoundary>
 
       <div className={styles.content}>
         {/* KPICardRow */}
-        <ErrorBoundary fallbackTitle="指标卡加载异常">
+        <ErrorBoundary fallbackTitle={t.kpiError}>
           <KPICardRow />
         </ErrorBoundary>
 
         {/* MainTrendChart - 最高优先级 */}
         <div className={styles.mainTrendSection}>
-          <ErrorBoundary fallbackTitle="主趋势图加载异常">
+          <ErrorBoundary fallbackTitle={t.mainTrendError}>
             <MainTrendChart />
           </ErrorBoundary>
         </div>
 
         {/* RevenueForecastV2Chart - 收入预测分析看板2 */}
         <div className={styles.mainTrendSection}>
-          <ErrorBoundary fallbackTitle="收入预测分析看板2加载异常">
+          <ErrorBoundary fallbackTitle={t.revForecastError}>
             <RevenueForecastV2Chart />
           </ErrorBoundary>
         </div>
 
         {/* CostStructureChart + RevenueStructureChart 并排 */}
         <div className={styles.twoColumns}>
-          <ErrorBoundary fallbackTitle="成本结构图加载异常">
+          <ErrorBoundary fallbackTitle={t.costStructError}>
             <CostStructureChart />
           </ErrorBoundary>
-          <ErrorBoundary fallbackTitle="收入结构图加载异常">
+          <ErrorBoundary fallbackTitle={t.revStructError}>
             <RevenueStructureChart />
           </ErrorBoundary>
         </div>
 
         {/* WaterfallChart + PackageProfitRanking 并排 */}
         <div className={styles.twoColumns}>
-          <ErrorBoundary fallbackTitle="瀑布图加载异常">
+          <ErrorBoundary fallbackTitle={t.waterfallError}>
             <WaterfallChart />
           </ErrorBoundary>
-          <ErrorBoundary fallbackTitle="套餐排行图加载异常">
+          <ErrorBoundary fallbackTitle={t.pkgRankError}>
             <PackageProfitRanking />
           </ErrorBoundary>
         </div>
 
         {/* CostDetailCharts 全宽 */}
-        <ErrorBoundary fallbackTitle="成本专项分析加载异常">
+        <ErrorBoundary fallbackTitle={t.costDetailError}>
           <CostDetailCharts />
         </ErrorBoundary>
 
         {/* AlertMonitor 全宽 */}
-        <ErrorBoundary fallbackTitle="异常监控加载异常">
+        <ErrorBoundary fallbackTitle={t.alertError}>
           <AlertMonitor />
         </ErrorBoundary>
       </div>

@@ -14,6 +14,7 @@ import type {
   RevenueForecastV2Response,
 } from '../types/dashboard';
 import { formatCurrency, formatPercent, formatLargeNumber } from './formatters';
+import { getCurrentLocaleLabels } from '../i18n/I18nContext';
 
 // ===== 颜色常量（对应 variables.css 中定义的色值）=====
 const COLORS = {
@@ -114,7 +115,7 @@ function forecastMarkLine(dates: string[], forecastStartIndex: number): Record<s
     },
     label: {
       show: true,
-      formatter: '← 历史  |  预测 →',
+      formatter: getCurrentLocaleLabels().historyForecastMark,
       color: 'rgba(255, 255, 255, 0.6)',
       fontSize: 11,
       fontWeight: 500,
@@ -140,17 +141,18 @@ function forecastMarkLine(dates: string[], forecastStartIndex: number): Record<s
  */
 export function buildMainTrendOption(data: MainTrendResponse | undefined | null, dateRanges?: string[]): Record<string, unknown> {
   if (!data || !data.dates?.length) {
-    return { title: { text: '暂无数据', left: 'center', top: 'center', textStyle: { color: COLORS.textSecondary } } };
+    return { title: { text: getCurrentLocaleLabels().noData, left: 'center', top: 'center', textStyle: { color: COLORS.textSecondary } } };
   }
 
   const fsi = data.forecastStartIndex;
   const hasForecast = fsi != null && fsi > 0 && fsi < data.dates.length;
 
+  const t = getCurrentLocaleLabels();
   const seriesDefs = [
-    { name: '可确认收入预测', type: 'bar', values: data.confirmedRevenue, color: COLORS.revenue },
-    { name: '觅睿销售额预测', type: 'line', values: data.meariSales, color: COLORS.sales, smooth: true },
-    { name: '成本预测', type: 'bar', values: data.costPrediction, color: COLORS.cost },
-    { name: '利润预测', type: 'line', values: data.profitPrediction, color: COLORS.profit, smooth: true },
+    { name: t.confirmedRevForecast, type: 'bar', values: data.confirmedRevenue, color: COLORS.revenue },
+    { name: t.meariSalesForecast, type: 'line', values: data.meariSales, color: COLORS.sales, smooth: true },
+    { name: t.costForecastKPI, type: 'bar', values: data.costPrediction, color: COLORS.cost },
+    { name: t.profitForecastKPI, type: 'line', values: data.profitPrediction, color: COLORS.profit, smooth: true },
   ];
 
   const legendNames = seriesDefs.map((s) => s.name);
@@ -215,7 +217,7 @@ export function buildMainTrendOption(data: MainTrendResponse | undefined | null,
     legend: baseLegend(legendNames),
     grid: { left: '3%', right: '4%', bottom: '8%', top: '12%', containLabel: true },
     xAxis: baseCategoryXAxis(data.dates),
-    yAxis: { ...baseValueYAxis('金额'), min: 0 },
+    yAxis: { ...baseValueYAxis(t.amountLabel), min: 0 },
     series,
   };
 }
@@ -232,13 +234,14 @@ export function buildMainTrendOption(data: MainTrendResponse | undefined | null,
  */
 export function buildCostStructureOption(data: CostStructureResponse | undefined | null, dateRanges?: string[]): Record<string, unknown> {
   if (!data || !data.dates?.length) {
-    return { title: { text: '暂无数据', left: 'center', top: 'center', textStyle: { color: COLORS.textSecondary } } };
+    return { title: { text: getCurrentLocaleLabels().noData, left: 'center', top: 'center', textStyle: { color: COLORS.textSecondary } } };
   }
 
   const fsi = data.forecastStartIndex;
   const hasForecast = fsi != null && fsi > 0 && fsi < data.dates.length;
 
-  const costNames = ['服务器成本预测', '4G卡流量预测', '4G卡费预测', '手续费预测', '觅睿分成预测', '客户分成预测'];
+  const t = getCurrentLocaleLabels();
+  const costNames = [t.serverCostForecast, t.traffic4GCostForecast, t.cardFeeCostForecast, t.paymentFeeForecast, t.meariShareCostForecast, t.customerShareCostForecast];
   const costColors = [COLORS.serverCost, COLORS.trafficCost4G, COLORS.cardFeeCost, COLORS.paymentFee, COLORS.meariShare, COLORS.customerShare];
   const costData = [data.serverCost, data.trafficCost4G, data.cardFeeCost, data.paymentFee, data.meariShareCost, data.customerShareCost];
 
@@ -303,7 +306,7 @@ export function buildCostStructureOption(data: CostStructureResponse | undefined
     legend: baseLegend(costNames),
     grid: baseGrid(),
     xAxis: baseCategoryXAxis(data.dates),
-    yAxis: { ...baseValueYAxis('成本金额'), min: 0 },
+    yAxis: { ...baseValueYAxis(t.costAmountLabel), min: 0 },
     series,
   };
 }
@@ -320,16 +323,17 @@ export function buildCostStructureOption(data: CostStructureResponse | undefined
  */
 export function buildRevenueStructureOption(data: RevenueStructureResponse | undefined | null, dateRanges?: string[]): Record<string, unknown> {
   if (!data || !data.dates?.length) {
-    return { title: { text: '暂无数据', left: 'center', top: 'center', textStyle: { color: COLORS.textSecondary } } };
+    return { title: { text: getCurrentLocaleLabels().noData, left: 'center', top: 'center', textStyle: { color: COLORS.textSecondary } } };
   }
 
   const fsi = data.forecastStartIndex;
   const hasForecast = fsi != null && fsi > 0 && fsi < data.dates.length;
 
+  const t = getCurrentLocaleLabels();
   const seriesDefs = [
-    { name: '觅睿收款可确认收入预测', type: 'bar', stack: 'revenue', values: data.meariRevenue, color: COLORS.meariRevenue },
-    { name: '客户收款可确认收入预测', type: 'bar', stack: 'revenue', values: data.customerRevenue, color: COLORS.customerRevenue },
-    { name: '总可确认收入预测', type: 'line', values: data.totalConfirmedRevenue, color: COLORS.revenue, lineWidth: 2, smooth: true },
+    { name: t.meariRevenueForecast, type: 'bar', stack: 'revenue', values: data.meariRevenue, color: COLORS.meariRevenue },
+    { name: t.customerRevenueForecast, type: 'bar', stack: 'revenue', values: data.customerRevenue, color: COLORS.customerRevenue },
+    { name: t.totalRevenue, type: 'line', values: data.totalConfirmedRevenue, color: COLORS.revenue, lineWidth: 2, smooth: true },
   ];
 
   const legendNames = seriesDefs.map((s) => s.name);
@@ -394,7 +398,7 @@ export function buildRevenueStructureOption(data: RevenueStructureResponse | und
     legend: baseLegend(legendNames),
     grid: baseGrid(),
     xAxis: baseCategoryXAxis(data.dates),
-    yAxis: { ...baseValueYAxis('收入金额'), min: 0 },
+    yAxis: { ...baseValueYAxis(t.revenueAmountLabel), min: 0 },
     series,
   };
 }
@@ -410,10 +414,11 @@ export function buildRevenueStructureOption(data: RevenueStructureResponse | und
  */
 export function buildWaterfallOption(data: WaterfallResponse | undefined | null): Record<string, unknown> {
   if (!data) {
-    return { title: { text: '暂无数据', left: 'center', top: 'center', textStyle: { color: COLORS.textSecondary } } };
+    return { title: { text: getCurrentLocaleLabels().noData, left: 'center', top: 'center', textStyle: { color: COLORS.textSecondary } } };
   }
 
-  const categories = ['总可确认收入预测', '服务器成本预测', '4G卡流量预测', '4G卡费预测', '支付平台手续费预测', '觅睿收款分成预测', '客户收款分成预测', '利润预测'];
+  const t = getCurrentLocaleLabels();
+  const categories = [t.totalRevenue, t.serverCostForecast, t.traffic4GCostForecast, t.cardFeeCostForecast, t.paymentFeeForecast, t.meariShareCostForecast, t.customerShareCostForecast, t.profitForecastKPI];
   const costs = [data.serverCost, data.trafficCost4G, data.cardFeeCost, data.paymentFee, data.meariShareCost, data.customerShareCost];
 
   const transparent: number[] = [];
@@ -442,7 +447,7 @@ export function buildWaterfallOption(data: WaterfallResponse | undefined | null)
       trigger: 'axis',
       formatter(params: Array<{ seriesName: string; value: number; marker: string; dataIndex: number }>) {
         if (!Array.isArray(params) || params.length === 0) return '';
-        const visible = params.filter((p) => p.seriesName !== '透明底座');
+        const visible = params.filter((p) => p.seriesName !== '_transparent_base');
         if (visible.length === 0) return '';
         const idx = visible[0].dataIndex;
         const name = categories[idx];
@@ -450,7 +455,7 @@ export function buildWaterfallOption(data: WaterfallResponse | undefined | null)
         const pct = data.totalRevenue !== 0
           ? ((val / data.totalRevenue) * 100).toFixed(1)
           : '0.0';
-        return `<div style="font-weight:bold">${name}</div>${formatCurrency(val)}<br/>占总收入: ${pct}%`;
+        return `<div style="font-weight:bold">${name}</div>${formatCurrency(val)}<br/>${t.revenueSharePct}: ${pct}%`;
       },
     },
     grid: baseGrid(),
@@ -458,10 +463,10 @@ export function buildWaterfallOption(data: WaterfallResponse | undefined | null)
       ...baseCategoryXAxis(categories),
       axisLabel: { color: COLORS.textSecondary, fontSize: 12, rotate: 20 },
     },
-    yAxis: { ...baseValueYAxis('金额'), min: 0 },
+    yAxis: { ...baseValueYAxis(t.amountLabel), min: 0 },
     series: [
       {
-        name: '透明底座',
+        name: '_transparent_base',
         type: 'bar',
         stack: 'waterfall',
         data: transparent.map(v => ({
@@ -472,7 +477,7 @@ export function buildWaterfallOption(data: WaterfallResponse | undefined | null)
         tooltip: { show: false },
       },
       {
-        name: '数值',
+        name: '_values',
         type: 'bar',
         stack: 'waterfall',
         data: values.map((v, i) => ({
@@ -503,18 +508,20 @@ export function buildPackageRankingOption(
   metric: 'profit' | 'profitMargin' | 'revenue' | 'cost' = 'profit',
 ): Record<string, unknown> {
   if (!items || items.length === 0) {
-    return { title: { text: '暂无数据', left: 'center', top: 'center', textStyle: { color: COLORS.textSecondary } } };
+    return { title: { text: getCurrentLocaleLabels().noData, left: 'center', top: 'center', textStyle: { color: COLORS.textSecondary } } };
   }
+
+  const t = getCurrentLocaleLabels();
 
   const sorted = [...items].sort((a, b) => b[metric] - a[metric]);
   const names = sorted.map((item) => item.name).reverse();
   const values = sorted.map((item) => item[metric]).reverse();
 
   const metricLabels: Record<string, string> = {
-    profit: '利润额',
-    profitMargin: '利润率',
-    revenue: '收入',
-    cost: '成本',
+    profit: t.profitAmount,
+    profitMargin: t.profitMargin,
+    revenue: t.revenueMetric,
+    cost: t.costMetric,
   };
 
   const metricColors: Record<string, string> = {
@@ -539,10 +546,10 @@ export function buildPackageRankingOption(
         if (!item) return '';
         return [
           `<div style="font-weight:bold">${name}</div>`,
-          `利润额: ${formatCurrency(item.profit)}`,
-          `利润率: ${formatPercent(item.profitMargin)}`,
-          `收入: ${formatCurrency(item.revenue)}`,
-          `成本: ${formatCurrency(item.cost)}`,
+          `${t.profitAmount}: ${formatCurrency(item.profit)}`,
+          `${t.profitMargin}: ${formatPercent(item.profitMargin)}`,
+          `${t.revenueMetric}: ${formatCurrency(item.revenue)}`,
+          `${t.costMetric}: ${formatCurrency(item.cost)}`,
         ].join('<br/>');
       },
     },
@@ -601,18 +608,19 @@ export function buildPackageRankingOption(
  */
 export function buildCostDetailOption(data: CostDetailResponse | undefined | null, dateRanges?: string[]): Record<string, unknown> {
   if (!data || !data.dates?.length) {
-    return { title: { text: '暂无数据', left: 'center', top: 'center', textStyle: { color: COLORS.textSecondary } } };
+    return { title: { text: getCurrentLocaleLabels().noData, left: 'center', top: 'center', textStyle: { color: COLORS.textSecondary } } };
   }
 
   const fsi = data.forecastStartIndex;
   const hasForecast = fsi != null && fsi > 0 && fsi < data.dates.length;
 
+  const t = getCurrentLocaleLabels();
   const seriesDefs = [
-    { name: '手续费', values: data.paymentFee, color: COLORS.paymentFee },
-    { name: '4G卡流量', values: data.trafficCost4G, color: COLORS.trafficCost4G },
-    { name: '4G卡费', values: data.cardFeeCost, color: COLORS.cardFeeCost },
-    { name: '觅睿分成', values: data.meariShareCost, color: COLORS.meariShare },
-    { name: '客户分成', values: data.customerShareCost, color: COLORS.customerShare },
+    { name: t.paymentFeeForecast, values: data.paymentFee, color: COLORS.paymentFee },
+    { name: t.traffic4GCostForecast, values: data.trafficCost4G, color: COLORS.trafficCost4G },
+    { name: t.cardFeeCostForecast, values: data.cardFeeCost, color: COLORS.cardFeeCost },
+    { name: t.meariShareCostForecast, values: data.meariShareCost, color: COLORS.meariShare },
+    { name: t.customerShareCostForecast, values: data.customerShareCost, color: COLORS.customerShare },
   ];
 
   const legendNames = seriesDefs.map((s) => s.name);
@@ -676,7 +684,7 @@ export function buildCostDetailOption(data: CostDetailResponse | undefined | nul
     legend: baseLegend(legendNames),
     grid: baseGrid(),
     xAxis: baseCategoryXAxis(data.dates),
-    yAxis: { ...baseValueYAxis('成本金额'), min: 0 },
+    yAxis: { ...baseValueYAxis(t.costAmountLabel), min: 0 },
     series,
   };
 }
@@ -697,17 +705,19 @@ export function buildRevenueForecastV2Option(
   dateRanges?: string[],
 ): Record<string, unknown> {
   if (!data || !data.dates?.length) {
-    return { title: { text: '暂无数据', left: 'center', top: 'center', textStyle: { color: COLORS.textSecondary } } };
+    return { title: { text: getCurrentLocaleLabels().noData, left: 'center', top: 'center', textStyle: { color: COLORS.textSecondary } } };
   }
 
   const fsi = data.forecastStartIndex;
   const hasForecast = fsi != null && fsi > 0 && fsi < data.dates.length;
 
+  const t = getCurrentLocaleLabels();
+
   // 注意：跨期收入本身就是虚线，预测段用更稀疏的虚线区分
   const seriesDefs = [
-    { name: '跨期可确认收入预测', values: data.crossPeriodRevenue, color: '#d2a8ff', historyLineType: 'dashed' as const, forecastLineType: [4, 4] as number[], lineWidth: 1 },
-    { name: '当月新增可确认收入预测', values: data.newMonthRevenue, color: '#e6c07b', historyLineType: 'solid' as const, forecastLineType: 'dashed' as const, lineWidth: 1 },
-    { name: '总可确认收入预测', values: data.totalConfirmedRevenue, color: '#58a6ff', historyLineType: 'solid' as const, forecastLineType: 'dashed' as const, lineWidth: 3 },
+    { name: t.crossPeriodRevenue, values: data.crossPeriodRevenue, color: '#d2a8ff', historyLineType: 'dashed' as const, forecastLineType: [4, 4] as number[], lineWidth: 1 },
+    { name: t.currentMonthRevenue, values: data.newMonthRevenue, color: '#e6c07b', historyLineType: 'solid' as const, forecastLineType: 'dashed' as const, lineWidth: 1 },
+    { name: t.totalRevenue, values: data.totalConfirmedRevenue, color: '#58a6ff', historyLineType: 'solid' as const, forecastLineType: 'dashed' as const, lineWidth: 3 },
   ];
 
   const legendNames = seriesDefs.map((s) => s.name);
@@ -771,7 +781,7 @@ export function buildRevenueForecastV2Option(
     legend: baseLegend(legendNames),
     grid: baseGrid(),
     xAxis: baseCategoryXAxis(data.dates),
-    yAxis: { ...baseValueYAxis('金额'), min: 0 },
+    yAxis: { ...baseValueYAxis(t.amountLabel), min: 0 },
     series,
   };
 }

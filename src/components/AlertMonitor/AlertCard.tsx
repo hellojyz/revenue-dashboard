@@ -1,5 +1,6 @@
 import type { AlertCardProps } from '../../types/dashboard';
 import { formatPercent, formatChange } from '../../utils/formatters';
+import { useI18n } from '../../i18n/I18nContext';
 import styles from './AlertCard.module.css';
 
 /**
@@ -15,9 +16,10 @@ const AlertCard: React.FC<AlertCardProps> = ({
   threshold,
   changePercent,
 }) => {
+  const { t } = useI18n();
   const cardClass = `${styles.alertCard} ${severity === 'critical' ? styles.critical : styles.warning}`;
   const badgeClass = `${styles.severityBadge} ${severity === 'critical' ? styles.badgeCritical : styles.badgeWarning}`;
-  const badgeText = severity === 'critical' ? '严重' : '警告';
+  const badgeText = severity === 'critical' ? t.severeCN : t.warningCN;
 
   return (
     <div className={cardClass} data-testid="alert-card">
@@ -29,14 +31,14 @@ const AlertCard: React.FC<AlertCardProps> = ({
       </div>
       <div className={styles.detail}>
         <div className={styles.detailRow}>
-          <span className={styles.detailLabel}>当前值 / 阈值</span>
+          <span className={styles.detailLabel}>{t.currentVsThreshold}</span>
           <span className={styles.detailValue}>
             {formatPercent(currentValue)} / {formatPercent(threshold)}
           </span>
         </div>
         {changePercent !== undefined && (
           <div className={styles.detailRow}>
-            <span className={styles.detailLabel}>变化幅度</span>
+            <span className={styles.detailLabel}>{t.changeAmount}</span>
             <span className={`${styles.changeValue} ${styles.changeUp}`}>
               {formatChange(changePercent)}
             </span>

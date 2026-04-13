@@ -6,12 +6,14 @@ import { useDashboardStore } from '../../store/useDashboardStore';
 import { usePackageRankingData } from '../../hooks/useDashboardData';
 import { buildPackageRankingOption } from '../../utils/chartHelpers';
 import { formatCurrency, formatPercent } from '../../utils/formatters';
+import { useI18n } from '../../i18n/I18nContext';
 import styles from './ChartCard.module.css';
 
 type Dimension = 'productType' | 'packageVersion';
 type Metric = 'profit' | 'profitMargin' | 'revenue' | 'cost';
 
 const PackageProfitRanking: React.FC = () => {
+  const { t } = useI18n();
   const [dimension, setDimension] = useState<Dimension>('productType');
   const [metric, setMetric] = useState<Metric>('profit');
 
@@ -23,7 +25,6 @@ const PackageProfitRanking: React.FC = () => {
   const items = data?.items;
   const option = buildPackageRankingOption(items, metric);
 
-  // 计算摘要：利润额最优 & 利润率最优
   const summary = useMemo(() => {
     if (!items || items.length === 0) return null;
     const topProfit = [...items].sort((a, b) => b.profit - a.profit)[0];
@@ -46,20 +47,20 @@ const PackageProfitRanking: React.FC = () => {
 
   return (
     <div className={styles.chartCard}>
-      <div className={styles.chartTitle}>套餐盈利能力预测排行 — 识别最赚钱的套餐产品</div>
+      <div className={styles.chartTitle}>{t.pkgRankTitle}</div>
 
       {/* 摘要卡片 */}
       {summary && (
         <div className={styles.summaryCards}>
           <div className={styles.summaryCard}>
-            <span className={styles.summaryCardLabel}>利润额预测最优</span>
+            <span className={styles.summaryCardLabel}>{t.topProfitLabel}</span>
             <span className={styles.summaryCardName}>{summary.topProfit.name}</span>
             <span className={`${styles.summaryCardValue} ${styles.summaryCardValueProfit}`}>
               {formatCurrency(summary.topProfit.profit)}
             </span>
           </div>
           <div className={styles.summaryCard}>
-            <span className={styles.summaryCardLabel}>利润率预测最优</span>
+            <span className={styles.summaryCardLabel}>{t.topMarginLabel}</span>
             <span className={styles.summaryCardName}>{summary.topMargin.name}</span>
             <span className={`${styles.summaryCardValue} ${styles.summaryCardValueMargin}`}>
               {formatPercent(summary.topMargin.profitMargin)}
@@ -69,7 +70,7 @@ const PackageProfitRanking: React.FC = () => {
       )}
 
       <div className={styles.controls}>
-        <span className={styles.controlLabel}>维度</span>
+        <span className={styles.controlLabel}>{t.dimension}</span>
         <Radio.Group
           value={dimension}
           onChange={handleDimensionChange}
@@ -77,11 +78,11 @@ const PackageProfitRanking: React.FC = () => {
           optionType="button"
           buttonStyle="solid"
           options={[
-            { label: '产品类型', value: 'productType' },
-            { label: '套餐版本', value: 'packageVersion' },
+            { label: t.productType, value: 'productType' },
+            { label: t.packageVersion2, value: 'packageVersion' },
           ]}
         />
-        <span className={styles.controlLabel}>指标</span>
+        <span className={styles.controlLabel}>{t.metric}</span>
         <Radio.Group
           value={metric}
           onChange={handleMetricChange}
@@ -89,26 +90,26 @@ const PackageProfitRanking: React.FC = () => {
           optionType="button"
           buttonStyle="solid"
           options={[
-            { label: '利润额', value: 'profit' },
-            { label: '利润率', value: 'profitMargin' },
-            { label: '收入', value: 'revenue' },
-            { label: '成本', value: 'cost' },
+            { label: t.profitAmount, value: 'profit' },
+            { label: t.profitMargin, value: 'profitMargin' },
+            { label: t.revenueMetric, value: 'revenue' },
+            { label: t.costMetric, value: 'cost' },
           ]}
         />
       </div>
       {isLoading && (
-        <div className={styles.statusContainer}>加载中...</div>
+        <div className={styles.statusContainer}>{t.loading}</div>
       )}
       {isError && (
         <div className={styles.errorContainer}>
-          <span className={styles.errorText}>数据加载失败</span>
+          <span className={styles.errorText}>{t.loadFailed}</span>
           <button className={styles.retryButton} onClick={() => refetch()}>
-            重试
+            {t.retry}
           </button>
         </div>
       )}
       {!isLoading && !isError && (!items || items.length === 0) && (
-        <div className={styles.statusContainer}>暂无数据</div>
+        <div className={styles.statusContainer}>{t.noData}</div>
       )}
       {!isLoading && !isError && items && items.length > 0 && (
         <div className={styles.chartArea}>

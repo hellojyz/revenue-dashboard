@@ -178,47 +178,54 @@ export const mockCostDetail: CostDetailResponse = {
   forecastStartIndex: FORECAST_START,
 };
 
-export const mockAlerts: AlertResponse = {
-  alerts: [
-    {
-      id: 'alert-1',
-      type: 'profitMargin',
-      severity: 'critical',
-      title: '利润率预测低于预设阈值',
-      productType: '4G',
-      currentValue: 0.05,
-      threshold: 0.1,
-    },
-    {
-      id: 'alert-2',
-      type: 'paymentFee',
-      severity: 'warning',
-      title: '手续费率预测环比异常上升',
-      currentValue: 0.08,
-      threshold: 0.05,
-      changePercent: 0.08,
-    },
-    {
-      id: 'alert-3',
-      type: 'trafficCost',
-      severity: 'warning',
-      title: '单设备流量成本预测环比异常上升',
-      deviceType: 'IPC',
-      currentValue: 0.15,
-      threshold: 0.1,
-      changePercent: 0.15,
-    },
-    {
-      id: 'alert-4',
-      type: 'profitMargin',
-      severity: 'critical',
-      title: '利润率预测低于预设阈值',
-      productType: '云存+4G',
-      currentValue: 0.08,
-      threshold: 0.1,
-    },
-  ],
-};
+import { getCurrentLocaleLabels } from '../i18n/I18nContext';
+
+export function getMockAlerts(): AlertResponse {
+  const t = getCurrentLocaleLabels();
+  return {
+    alerts: [
+      {
+        id: 'alert-1',
+        type: 'profitMargin',
+        severity: 'critical',
+        title: t.alertProfitBelowThreshold,
+        productType: '4G',
+        currentValue: 0.05,
+        threshold: 0.1,
+      },
+      {
+        id: 'alert-2',
+        type: 'paymentFee',
+        severity: 'warning',
+        title: t.alertPaymentFeeRise,
+        currentValue: 0.08,
+        threshold: 0.05,
+        changePercent: 0.08,
+      },
+      {
+        id: 'alert-3',
+        type: 'trafficCost',
+        severity: 'warning',
+        title: t.alertTrafficCostRise,
+        deviceType: 'IPC',
+        currentValue: 0.15,
+        threshold: 0.1,
+        changePercent: 0.15,
+      },
+      {
+        id: 'alert-4',
+        type: 'profitMargin',
+        severity: 'critical',
+        title: t.alertProfitBelowThreshold,
+        productType: t.cloud4G,
+        currentValue: 0.08,
+        threshold: 0.1,
+      },
+    ],
+  };
+}
+
+export const mockAlerts: AlertResponse = getMockAlerts();
 
 export const mockRevenueForecastV2: RevenueForecastV2Response = {
   dates: DATES,

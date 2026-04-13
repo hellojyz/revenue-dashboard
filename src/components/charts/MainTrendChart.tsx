@@ -4,18 +4,20 @@ import { useDashboardStore } from '../../store/useDashboardStore';
 import { useMainTrendData } from '../../hooks/useDashboardData';
 import { buildMainTrendOption } from '../../utils/chartHelpers';
 import { formatPercent } from '../../utils/formatters';
+import { useI18n } from '../../i18n/I18nContext';
 import styles from './ChartCard.module.css';
 
-const GRANULARITY_SUBTITLE: Record<string, string> = {
-  week: '近8周趋势',
-  month: '近6个月趋势',
-};
-
 const MainTrendChart: React.FC = () => {
+  const { t } = useI18n();
   const drillDownDate = useDashboardStore((s) => s.drillDownDate);
   const setDrillDownDate = useDashboardStore((s) => s.setDrillDownDate);
   const timeGranularity = useDashboardStore((s) => s.filters.timeGranularity);
   const { data, isLoading, isError, refetch } = useMainTrendData();
+
+  const GRANULARITY_SUBTITLE: Record<string, string> = useMemo(() => ({
+    week: t.last8weeks,
+    month: t.last6months,
+  }), [t]);
 
   const option = buildMainTrendOption(data, data?.dateRanges);
 
@@ -48,7 +50,7 @@ const MainTrendChart: React.FC = () => {
     <div className={styles.chartCard}>
       <div className={styles.chartTitleRow}>
         <div className={styles.chartTitle} style={{ marginBottom: 0 }}>
-          收入·成本·利润 主趋势分析
+          {t.mainTrendTitle}
           {GRANULARITY_SUBTITLE[timeGranularity] && (
             <span style={{ fontSize: 12, color: '#8b949e', marginLeft: 8, fontWeight: 400 }}>
               （{GRANULARITY_SUBTITLE[timeGranularity]}）
@@ -57,7 +59,7 @@ const MainTrendChart: React.FC = () => {
         </div>
         {profitMarginInfo && (
           <div className={styles.profitMarginIndicator}>
-            <span className={styles.profitMarginLabel}>利润率均值</span>
+            <span className={styles.profitMarginLabel}>{t.profitMarginAvg}</span>
             <span className={styles.profitMarginValue}>
               {formatPercent(profitMarginInfo.avg / 100)}
             </span>
@@ -68,18 +70,18 @@ const MainTrendChart: React.FC = () => {
         )}
       </div>
       {isLoading && (
-        <div className={styles.statusContainer}>加载中...</div>
+        <div className={styles.statusContainer}>{t.loading}</div>
       )}
       {isError && (
         <div className={styles.errorContainer}>
-          <span className={styles.errorText}>数据加载失败</span>
+          <span className={styles.errorText}>{t.loadFailed}</span>
           <button className={styles.retryButton} onClick={() => refetch()}>
-            重试
+            {t.retry}
           </button>
         </div>
       )}
       {!isLoading && !isError && (!data || !data.dates?.length) && (
-        <div className={styles.statusContainer}>暂无数据</div>
+        <div className={styles.statusContainer}>{t.noData}</div>
       )}
       {!isLoading && !isError && data && data.dates?.length > 0 && (
         <div className={styles.chartArea}>

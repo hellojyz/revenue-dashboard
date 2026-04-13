@@ -1,34 +1,14 @@
+import { useMemo } from 'react';
 import { DatePicker, Radio, Select } from 'antd';
 import type { RadioChangeEvent } from 'antd';
 import dayjs from 'dayjs';
 import type { Dayjs } from 'dayjs';
 import { useDashboardStore } from '../../store/useDashboardStore';
 import type { DashboardFilters } from '../../types/dashboard';
+import { useI18n } from '../../i18n/I18nContext';
 import styles from './FilterBar.module.css';
 
 const { RangePicker } = DatePicker;
-
-const ORDER_TYPE_OPTIONS = [
-  { label: '云存', value: 'cloud_storage' },
-  { label: '云+4G', value: 'cloud_4g' },
-  { label: '4G', value: '4g' },
-  { label: 'AI', value: 'ai' },
-  { label: '云+AI', value: 'cloud_ai' },
-];
-
-const DEVICE_TYPE_OPTIONS = [
-  { label: '电池摄像机', value: 'battery_camera' },
-  { label: '4G摄像机', value: '4g_camera' },
-  { label: '常电摄像机', value: 'ac_camera' },
-  { label: '门铃', value: 'doorbell' },
-];
-
-const PRODUCT_TYPE_OPTIONS = [
-  { label: '年包', value: 'yearly' },
-  { label: '月包', value: 'monthly' },
-  { label: '季包', value: 'quarterly' },
-  { label: '日包', value: 'daily' },
-];
 
 const PACKAGE_VERSION_OPTIONS = [
   { label: 'V0', value: 'v0' },
@@ -67,7 +47,30 @@ const TP_OPTIONS = [
 ];
 
 const FilterBar: React.FC = () => {
+  const { t } = useI18n();
   const { filters, setFilters } = useDashboardStore();
+
+  const ORDER_TYPE_OPTIONS = useMemo(() => [
+    { label: t.cloudStorage, value: 'cloud_storage' },
+    { label: t.cloud4G, value: 'cloud_4g' },
+    { label: t.fourG, value: '4g' },
+    { label: t.ai, value: 'ai' },
+    { label: t.cloudAI, value: 'cloud_ai' },
+  ], [t]);
+
+  const DEVICE_TYPE_OPTIONS = useMemo(() => [
+    { label: t.batteryCamera, value: 'battery_camera' },
+    { label: t.fourGCamera, value: '4g_camera' },
+    { label: t.acCamera, value: 'ac_camera' },
+    { label: t.doorbellDev, value: 'doorbell' },
+  ], [t]);
+
+  const PRODUCT_TYPE_OPTIONS = useMemo(() => [
+    { label: t.yearlyPkg, value: 'yearly' },
+    { label: t.monthlyPkg, value: 'monthly' },
+    { label: t.quarterlyPkg, value: 'quarterly' },
+    { label: t.dailyPkg2, value: 'daily' },
+  ], [t]);
 
   const handleDateRangeChange = (
     dates: [Dayjs | null, Dayjs | null] | null,
@@ -103,7 +106,7 @@ const FilterBar: React.FC = () => {
       {/* 第一层：时间范围、时间粒度 */}
       <div className={styles.filterRow}>
         <div className={styles.filterItem}>
-          <span className={styles.filterLabel}>时间范围</span>
+          <span className={styles.filterLabel}>{t.dateRange}</span>
           <RangePicker
             value={[dayjs(filters.dateRange[0]), dayjs(filters.dateRange[1])]}
             onChange={handleDateRangeChange}
@@ -113,7 +116,7 @@ const FilterBar: React.FC = () => {
         </div>
 
         <div className={styles.filterItem}>
-          <span className={styles.filterLabel}>时间粒度</span>
+          <span className={styles.filterLabel}>{t.granularity}</span>
           <Radio.Group
             value={filters.timeGranularity}
             onChange={handleGranularityChange}
@@ -121,9 +124,9 @@ const FilterBar: React.FC = () => {
             optionType="button"
             buttonStyle="solid"
             options={[
-              { label: '日', value: 'day' },
-              { label: '周', value: 'week' },
-              { label: '月', value: 'month' },
+              { label: t.granDay, value: 'day' },
+              { label: t.granWeek, value: 'week' },
+              { label: t.granMonth, value: 'month' },
             ]}
           />
         </div>
@@ -132,13 +135,13 @@ const FilterBar: React.FC = () => {
       {/* 第二层：订单类型、设备类型、套餐类型、套餐版本 */}
       <div className={styles.filterRow}>
         <div className={styles.filterItem}>
-          <span className={styles.filterLabel}>订单类型</span>
+          <span className={styles.filterLabel}>{t.orderType}</span>
           <Select
             mode="multiple"
             value={filters.orderTypes}
             onChange={(v) => handleMultiSelectChange('orderTypes', v)}
             options={ORDER_TYPE_OPTIONS}
-            placeholder="全部"
+            placeholder={t.allPlaceholder}
             allowClear
             size="small"
             style={SELECT_STYLE}
@@ -147,13 +150,13 @@ const FilterBar: React.FC = () => {
         </div>
 
         <div className={styles.filterItem}>
-          <span className={styles.filterLabel}>设备类型</span>
+          <span className={styles.filterLabel}>{t.filterDeviceType}</span>
           <Select
             mode="multiple"
             value={filters.deviceTypes}
             onChange={(v) => handleMultiSelectChange('deviceTypes', v)}
             options={DEVICE_TYPE_OPTIONS}
-            placeholder="全部"
+            placeholder={t.allPlaceholder}
             allowClear
             size="small"
             style={SELECT_STYLE}
@@ -162,13 +165,13 @@ const FilterBar: React.FC = () => {
         </div>
 
         <div className={styles.filterItem}>
-          <span className={styles.filterLabel}>套餐类型</span>
+          <span className={styles.filterLabel}>{t.filterPkgType}</span>
           <Select
             mode="multiple"
             value={filters.productTypes}
             onChange={(v) => handleMultiSelectChange('productTypes', v)}
             options={PRODUCT_TYPE_OPTIONS}
-            placeholder="全部"
+            placeholder={t.allPlaceholder}
             allowClear
             size="small"
             style={SELECT_STYLE}
@@ -177,13 +180,13 @@ const FilterBar: React.FC = () => {
         </div>
 
         <div className={styles.filterItem}>
-          <span className={styles.filterLabel}>套餐版本</span>
+          <span className={styles.filterLabel}>{t.pkgVersion}</span>
           <Select
             mode="multiple"
             value={filters.packageVersions}
             onChange={(v) => handleMultiSelectChange('packageVersions', v)}
             options={PACKAGE_VERSION_OPTIONS}
-            placeholder="全部"
+            placeholder={t.allPlaceholder}
             allowClear
             size="small"
             style={SELECT_STYLE}
@@ -198,7 +201,7 @@ const FilterBar: React.FC = () => {
             value={filters.sourceApps}
             onChange={(v) => handleMultiSelectChange('sourceApps', v)}
             options={SOURCE_APP_OPTIONS}
-            placeholder="全部"
+            placeholder={t.allPlaceholder}
             allowClear
             size="small"
             style={SELECT_STYLE}
@@ -207,13 +210,13 @@ const FilterBar: React.FC = () => {
         </div>
 
         <div className={styles.filterItem}>
-          <span className={styles.filterLabel}>工厂</span>
+          <span className={styles.filterLabel}>{t.factory}</span>
           <Select
             mode="multiple"
             value={filters.factories}
             onChange={(v) => handleMultiSelectChange('factories', v)}
             options={FACTORY_OPTIONS}
-            placeholder="全部"
+            placeholder={t.allPlaceholder}
             allowClear
             size="small"
             style={SELECT_STYLE}
@@ -222,13 +225,13 @@ const FilterBar: React.FC = () => {
         </div>
 
         <div className={styles.filterItem}>
-          <span className={styles.filterLabel}>卖家</span>
+          <span className={styles.filterLabel}>{t.seller}</span>
           <Select
             mode="multiple"
             value={filters.sellers}
             onChange={(v) => handleMultiSelectChange('sellers', v)}
             options={SELLER_OPTIONS}
-            placeholder="全部"
+            placeholder={t.allPlaceholder}
             allowClear
             size="small"
             style={SELECT_STYLE}
@@ -243,7 +246,7 @@ const FilterBar: React.FC = () => {
             value={filters.tpList}
             onChange={(v) => handleMultiSelectChange('tpList', v)}
             options={TP_OPTIONS}
-            placeholder="全部"
+            placeholder={t.allPlaceholder}
             allowClear
             size="small"
             style={SELECT_STYLE}

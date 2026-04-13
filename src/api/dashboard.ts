@@ -25,7 +25,7 @@ import {
   mockWaterfall,
   mockPackageRanking,
   mockCostDetail,
-  mockAlerts,
+  getMockAlerts,
   mockMainTrend8W,
   mockCostStructure8W,
   mockRevenueStructure8W,
@@ -452,7 +452,7 @@ export async function fetchRevenueForecastV2(
 export async function fetchAlerts(
   filters: DashboardFilters,
 ): Promise<AlertResponse> {
-  if (USE_MOCK) { await delay(); return mockAlerts; }
+  if (USE_MOCK) { await delay(); return getMockAlerts(); }
   const { data } = await apiClient.get<AlertResponse>('/alerts', {
     params: filtersToParams(filters),
   });
