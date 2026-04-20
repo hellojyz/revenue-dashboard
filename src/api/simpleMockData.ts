@@ -54,7 +54,10 @@ export const simpleMockCrossPeriod: SimpleCrossPeriodResponse = {
 
 export const simpleMockNewMonthPkg: SimpleNewMonthPackageResponse = {
   dates: DATES,
+  totalOrderAmount: genSeries(1500000, 150000, TOTAL_DAYS),
+  yearlyOrderAmount: genSeries(900000, 90000, TOTAL_DAYS),
   newMonthYearlyConfirmed: genSeries(220000, 25000, TOTAL_DAYS),
+  monthlyOrderAmount: genSeries(600000, 60000, TOTAL_DAYS),
   newMonthMonthlyConfirmed: genSeries(160000, 20000, TOTAL_DAYS),
   newMonthOrderAmount: genSeries(800000, 80000, TOTAL_DAYS),
   forecastStartIndex: FORECAST_START,

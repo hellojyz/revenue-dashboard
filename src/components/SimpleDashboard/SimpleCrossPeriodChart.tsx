@@ -55,9 +55,9 @@ const SimpleCrossPeriodChart: React.FC = () => {
     const hasForecast = fsi != null && fsi > 0 && fsi < data.dates.length;
 
     const seriesDefs = [
-      { name: labels.crossPeriodRevLabel, type: 'bar' as const, stack: 'revenue', values: data.crossPeriodRevenue, color: COLORS.crossPeriod },
-      { name: labels.newMonthConfirmedLabel, type: 'bar' as const, stack: 'revenue', values: data.newMonthConfirmed, color: COLORS.newMonthConfirmed },
-      { name: labels.newMonthOrderLabel, type: 'line' as const, stack: undefined, values: data.newMonthOrderAmount, color: COLORS.newMonthOrder },
+      { name: labels.crossPeriodRevLabel, type: 'bar' as const, stack: 'revenue', values: data.crossPeriodRevenue, color: COLORS.crossPeriod, actualOnly: false },
+      { name: labels.newMonthConfirmedLabel, type: 'bar' as const, stack: 'revenue', values: data.newMonthConfirmed, color: COLORS.newMonthConfirmed, actualOnly: false },
+      { name: labels.newMonthOrderLabel, type: 'line' as const, stack: undefined, values: data.newMonthOrderAmount, color: COLORS.newMonthOrder, actualOnly: true },
     ];
 
     const legendNames = seriesDefs.map((s) => s.name);
@@ -78,6 +78,7 @@ const SimpleCrossPeriodChart: React.FC = () => {
         };
         if (si === 0) historySeries.markLine = forecastMarkLine(data.dates, fsi!);
         series.push(historySeries);
+        if (!def.actualOnly) {
         series.push({
           name: def.name,
           type: def.type,
@@ -86,6 +87,7 @@ const SimpleCrossPeriodChart: React.FC = () => {
           ...(isBar && def.stack ? { stack: def.stack + '-forecast' } : {}),
           ...(def.type === 'line' ? { lineStyle: { color: def.color, type: 'dashed' }, smooth: true } : {}),
         });
+        }
       } else {
         series.push({
           name: def.name,

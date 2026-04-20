@@ -27,9 +27,12 @@ export interface SimpleCrossPeriodResponse {
 
 export interface SimpleNewMonthPackageResponse {
   dates: string[];
-  newMonthYearlyConfirmed: number[];  // 当月新增年包可确认预测
-  newMonthMonthlyConfirmed: number[]; // 当月新增月包可确认预测
-  newMonthOrderAmount: number[];      // 当月新增订单金额预测
+  totalOrderAmount: number[];         // 总动销订单金额
+  yearlyOrderAmount: number[];        // 年包动销订单金额
+  newMonthYearlyConfirmed: number[];  // 年包新增可确认预测
+  monthlyOrderAmount: number[];       // 月包动销订单金额
+  newMonthMonthlyConfirmed: number[]; // 月包新增可确认预测
+  newMonthOrderAmount: number[];      // 当月新增订单金额预测（保留兼容）
   forecastStartIndex: number;
   dateRanges?: string[];
 }

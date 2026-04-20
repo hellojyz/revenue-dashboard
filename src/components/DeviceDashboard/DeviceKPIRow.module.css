@@ -1,0 +1,36 @@
+.row {
+  display: grid;
+  grid-template-columns: repeat(5, 1fr);
+  gap: 12px;
+}
+
+.cardWrapper {
+  cursor: pointer;
+  border-radius: 8px;
+  transition: box-shadow 0.2s;
+}
+
+.cardWrapper:hover {
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.12);
+}
+
+.highlighted {
+  outline: 2px solid #3fb950;
+  border-radius: 8px;
+}
+
+.alertYellow {
+  outline: 2px solid #ffd700;
+  border-radius: 8px;
+}
+
+.alertRed {
+  outline: 2px solid #f85149;
+  border-radius: 8px;
+}
+
+.error {
+  color: #f85149;
+  padding: 16px;
+  text-align: center;
+}

@@ -57,9 +57,9 @@ const SimpleMainTrendChart: React.FC = () => {
     const hasForecast = fsi != null && fsi > 0 && fsi < data.dates.length;
 
     const seriesDefs = [
-      { name: labels.orderAmount, type: 'bar' as const, values: data.orderAmount, color: COLORS.orderAmount },
-      { name: labels.meariSalesForecast2, type: 'line' as const, values: data.meariSales, color: COLORS.meariSales },
-      { name: labels.confirmedRevForecast2, type: 'line' as const, values: data.confirmedRevenue, color: COLORS.confirmedRev },
+      { name: labels.orderAmount, type: 'bar' as const, values: data.orderAmount, color: COLORS.orderAmount, actualOnly: true },
+      { name: labels.meariSalesForecast2, type: 'line' as const, values: data.meariSales, color: COLORS.meariSales, actualOnly: false },
+      { name: labels.confirmedRevForecast2, type: 'line' as const, values: data.confirmedRevenue, color: COLORS.confirmedRev, actualOnly: false },
     ];
 
     const legendNames = seriesDefs.map((s) => s.name);
@@ -78,13 +78,16 @@ const SimpleMainTrendChart: React.FC = () => {
         };
         if (si === 0) historySeries.markLine = forecastMarkLine(data.dates, fsi!);
         series.push(historySeries);
-        series.push({
-          name: def.name,
-          type: def.type,
-          data: forecast,
-          itemStyle: { color: def.color, ...(def.type === 'bar' ? { opacity: 0.45 } : {}) },
-          ...(def.type === 'line' ? { lineStyle: { color: def.color, type: 'dashed' }, smooth: true } : {}),
-        });
+        // 实际值指标（如订单金额）不延伸到预测区间
+        if (!def.actualOnly) {
+          series.push({
+            name: def.name,
+            type: def.type,
+            data: forecast,
+            itemStyle: { color: def.color, ...(def.type === 'bar' ? { opacity: 0.45 } : {}) },
+            ...(def.type === 'line' ? { lineStyle: { color: def.color, type: 'dashed' }, smooth: true } : {}),
+          });
+        }
       } else {
         series.push({
           name: def.name,

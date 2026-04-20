@@ -32,14 +32,15 @@ const SimpleDashboardPage: React.FC = () => {
           </ErrorBoundary>
         </div>
 
-        <div className={styles.twoColumns}>
+        <div className={styles.mainTrendSection}>
           <ErrorBoundary fallbackTitle={t.revForecastError}>
             <SimpleCrossPeriodChart />
           </ErrorBoundary>
-          <ErrorBoundary fallbackTitle={t.revForecastError}>
-            <SimpleNewMonthPkgChart />
-          </ErrorBoundary>
         </div>
+
+        <ErrorBoundary fallbackTitle={t.revForecastError}>
+          <SimpleNewMonthPkgChart />
+        </ErrorBoundary>
 
         <ErrorBoundary fallbackTitle={t.revForecastError}>
           <SimpleCollectionCharts />

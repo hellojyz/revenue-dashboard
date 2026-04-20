@@ -61,9 +61,10 @@ function buildCollectionOption(
   const legendNames = [barName, lineName];
   const series: Record<string, unknown>[] = [];
 
+  // bar = order amount (actual only), line = confirmed (estimate, extends to forecast)
   const defs = [
-    { name: barName, type: 'bar' as const, values: barValues, color: barColor },
-    { name: lineName, type: 'line' as const, values: lineValues, color: lineColor },
+    { name: barName, type: 'bar' as const, values: barValues, color: barColor, actualOnly: true },
+    { name: lineName, type: 'line' as const, values: lineValues, color: lineColor, actualOnly: false },
   ];
 
   for (let si = 0; si < defs.length; si++) {
@@ -79,6 +80,7 @@ function buildCollectionOption(
       };
       if (si === 0) historySeries.markLine = forecastMarkLine(dates, fsi!);
       series.push(historySeries);
+      if (!def.actualOnly) {
       series.push({
         name: def.name,
         type: def.type,
@@ -86,6 +88,7 @@ function buildCollectionOption(
         itemStyle: { color: def.color, ...(def.type === 'bar' ? { opacity: 0.45 } : {}) },
         ...(def.type === 'line' ? { lineStyle: { color: def.color, type: 'dashed' }, smooth: true } : {}),
       });
+      }
     } else {
       series.push({
         name: def.name,

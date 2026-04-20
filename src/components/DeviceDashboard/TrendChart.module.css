@@ -1,0 +1,27 @@
+.chartCard {
+  background: #fff;
+  border-radius: 8px;
+  padding: 16px;
+  box-shadow: 0 1px 4px rgba(0, 0, 0, 0.08);
+  border: 2px solid transparent;
+  transition: border-color 0.2s;
+  position: relative;
+}
+
+.chartCard.highlighted {
+  border-color: #3fb950;
+}
+
+.chartTitle {
+  font-size: 14px;
+  font-weight: 600;
+  color: #333;
+  margin-bottom: 4px;
+}
+
+.chartControls {
+  position: absolute;
+  top: 12px;
+  right: 16px;
+  z-index: 10;
+}

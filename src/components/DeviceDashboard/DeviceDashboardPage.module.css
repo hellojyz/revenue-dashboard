@@ -1,0 +1,88 @@
+:root {
+  --device-header-bg: #1a2332;
+  --device-page-bg: #f0f4f8;
+  --device-kpi-primary: #3fb950;
+  --device-alert-yellow: #ffd700;
+  --device-alert-red: #f85149;
+  --device-chart-blue: #58a6ff;
+  --device-chart-green: #3fb950;
+  --device-chart-purple: #bc8cff;
+  --device-chart-orange: #e3b341;
+}
+
+.page {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  padding: 16px;
+  background: var(--device-page-bg);
+  min-height: 100vh;
+}
+
+.header {
+  background: var(--device-header-bg);
+  border-radius: 8px;
+  padding: 16px 20px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.titleRow {
+  display: flex;
+  align-items: baseline;
+  gap: 12px;
+  flex-wrap: wrap;
+}
+
+.title {
+  font-size: 20px;
+  font-weight: 700;
+  color: #fff;
+  margin: 0;
+}
+
+.subtitle {
+  font-size: 13px;
+  color: #8b949e;
+}
+
+.updatedAt {
+  font-size: 12px;
+  color: #8b949e;
+}
+
+.bottomRow {
+  display: grid;
+  grid-template-columns: 3fr 2fr;
+  gap: 12px;
+}
+
+.errorBox {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 12px;
+  padding: 40px;
+  background: #fff;
+  border-radius: 8px;
+  color: #f85149;
+  font-size: 14px;
+}
+
+.retryBtn {
+  padding: 6px 20px;
+  background: #1677ff;
+  color: #fff;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 14px;
+}
+
+.retryBtn:hover {
+  background: #4096ff;
+}

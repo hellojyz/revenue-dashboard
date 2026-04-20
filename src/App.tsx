@@ -6,6 +6,7 @@ import LangSwitch from './components/common/LangSwitch';
 import DashboardPage from './components/DashboardPage';
 import HeatmapDashboardPage from './components/HeatmapDashboard/HeatmapDashboardPage';
 import SimpleDashboardPage from './components/SimpleDashboard/SimpleDashboardPage';
+import DeviceDashboardPage from './components/DeviceDashboard/DeviceDashboardPage';
 
 const queryClient = new QueryClient({
   defaultOptions: {
@@ -35,6 +36,11 @@ function AppInner() {
       key: 'simple',
       label: t.tabSimple,
       children: <SimpleDashboardPage />,
+    },
+    {
+      key: 'device',
+      label: '设备域看板',
+      children: <DeviceDashboardPage />,
     },
   ];
 
