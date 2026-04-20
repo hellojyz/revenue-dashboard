@@ -1,26 +1,27 @@
 import { describe, it, expect, beforeEach } from 'vitest';
 import { useDeviceStore } from './useDeviceStore';
+import type { TimeRange, PowerType, LifecycleStage, DeviceRegion, DeviceChannel } from '../types/deviceDashboard';
 
 const DEFAULT_STATE = {
   filters: {
-    timeRange: 'last_12_months',
-    region: [],
-    channel: [],
-    model: [],
-    firmwareVersion: [],
-    appVersion: [],
-    powerType: [],
-    lifecycleStage: [],
+    timeRange: 'last_12_months' as TimeRange,
+    region: [] as DeviceRegion[],
+    channel: [] as DeviceChannel[],
+    model: [] as string[],
+    firmwareVersion: [] as string[],
+    appVersion: [] as string[],
+    powerType: [] as PowerType[],
+    lifecycleStage: [] as LifecycleStage[],
   },
   pendingFilters: {
-    timeRange: 'last_12_months',
-    region: [],
-    channel: [],
-    model: [],
-    firmwareVersion: [],
-    appVersion: [],
-    powerType: [],
-    lifecycleStage: [],
+    timeRange: 'last_12_months' as TimeRange,
+    region: [] as DeviceRegion[],
+    channel: [] as DeviceChannel[],
+    model: [] as string[],
+    firmwareVersion: [] as string[],
+    appVersion: [] as string[],
+    powerType: [] as PowerType[],
+    lifecycleStage: [] as LifecycleStage[],
   },
   highlightedChart: null,
   drillDownPoint: null,

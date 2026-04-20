@@ -59,7 +59,7 @@ export default function DeviceScaleTrendChart({ chartId, isHighlighted }: Props)
         smooth: true,
         color: '#58a6ff',
         symbol: 'circle',
-        symbolSize: (val: number, params: any) =>
+        symbolSize: (_val: number, params: any) =>
           points[params.dataIndex]?.period === drillDownPoint ? 10 : 4,
         itemStyle: {
           color: (params: any) =>
