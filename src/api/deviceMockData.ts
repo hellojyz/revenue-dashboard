@@ -58,16 +58,19 @@ export const mockDeviceKPI: DeviceKPIData = {
   totalDevices: {
     value: 1210000,
     changePercent: 0.022,
+    yoyPercent: 0.085,
     sparkline: sparklineBase.totalDevices,
   },
   activatedDevices: {
     value: 980000,
     changePercent: 0.028,
+    yoyPercent: 0.092,
     sparkline: sparklineBase.activatedDevices,
   },
   activeDevices: {
     value: 726000,
     changePercent: 0.034,
+    yoyPercent: null,
     sparkline: sparklineBase.activeDevices,
   },
   onlineRate: {
@@ -75,10 +78,10 @@ export const mockDeviceKPI: DeviceKPIData = {
     changePercent: 0.023,
     sparkline: sparklineBase.onlineRate,
   },
-  churnRatio: {
-    value: 0.118,
+  churnDevices: {
+    value: 42000,
     changePercent: -0.077,
-    sparkline: sparklineBase.churnRatio,
+    sparkline: [48000, 47000, 46000, 45000, 44000, 43500, 43000, 42800, 42500, 42200, 42000, 42000],
   },
   updatedAt: new Date().toISOString(),
 };
@@ -187,4 +190,26 @@ export const mockDeviceDistributions: Record<DistributionDimension, DeviceDistri
   region:    buildDistribution('region'),
   channel:   buildDistribution('channel'),
   lifecycle: buildDistribution('lifecycle'),
+};
+
+// ─── 供电健康：耗电分布 Mock 数据 ─────────────────────────────────────────────
+
+export const mockPowerDistribution = {
+  buckets: [
+    { label: '0-20%',  ratio: 0.42 },
+    { label: '20-50%', ratio: 0.31 },
+    { label: '50-80%', ratio: 0.18 },
+    { label: '80%以上', ratio: 0.09 },
+  ],
+};
+
+// ─── 预览时长分布 Mock 数据 ───────────────────────────────────────────────────
+
+export const mockPreviewDuration = {
+  buckets: [
+    { label: '0-5s',   count: 185000 },
+    { label: '5-15s',  count: 312000 },
+    { label: '15-30s', count: 148000 },
+    { label: '30s以上', count: 81000 },
+  ],
 };

@@ -4,6 +4,7 @@ import { Radio } from 'antd';
 import { useDeviceTrendData } from '../../hooks/useDeviceData';
 import { useDeviceStore } from '../../store/useDeviceStore';
 import { getAlertLevel } from '../../utils/deviceThresholds';
+import { mockPowerDistribution } from '../../api/deviceMockData';
 import EmptyState from '../common/EmptyState';
 import LoadingState from '../common/LoadingState';
 import styles from './TrendChart.module.css';
@@ -25,9 +26,46 @@ export default function DevicePowerTrendChart({ chartId, isHighlighted }: Props)
   const points = data?.power.points ?? [];
   if (points.length === 0) return <EmptyState />;
 
-  const option = {
-    grid: { top: 40, right: 70, bottom: 60, left: 70 },
-    legend: { top: 8, data: ['日耗电量(度)', '高耗电占比', '充电异常设备数'] },
+  // 子图1：日耗电量分布（柱状图，静态分布数据）
+  const distOption = {
+    grid: { top: 30, right: 20, bottom: 40, left: 60 },
+    title: { text: '日耗电量分布', textStyle: { fontSize: 12, color: '#8b949e' }, left: 0, top: 4 },
+    xAxis: {
+      type: 'category' as const,
+      data: mockPowerDistribution.buckets.map((b) => b.label),
+      axisLabel: { fontSize: 11 },
+    },
+    yAxis: {
+      type: 'value' as const,
+      name: '设备占比(%)',
+      axisLabel: { formatter: (v: number) => `${(v * 100).toFixed(0)}%` },
+    },
+    tooltip: {
+      trigger: 'axis' as const,
+      formatter: (params: any[]) => {
+        const p = params[0];
+        return `${p.name}：${((p.value as number) * 100).toFixed(1)}%`;
+      },
+    },
+    series: [{
+      type: 'bar' as const,
+      data: mockPowerDistribution.buckets.map((b) => b.ratio),
+      barMaxWidth: 40,
+      itemStyle: { color: '#58a6ff' },
+      label: {
+        show: true,
+        position: 'top' as const,
+        formatter: (p: any) => `${((p.value as number) * 100).toFixed(1)}%`,
+        fontSize: 11,
+      },
+    }],
+  };
+
+  // 子图2：充电异常设备数 + 高耗电占比（双轴折线/柱线）
+  const trendOption = {
+    grid: { top: 30, right: 70, bottom: 40, left: 60 },
+    title: { text: '充电异常 & 高耗电占比', textStyle: { fontSize: 12, color: '#8b949e' }, left: 0, top: 4 },
+    legend: { top: 4, right: 0, data: ['充电异常设备数', '高耗电占比'], textStyle: { fontSize: 11 } },
     xAxis: {
       type: 'category' as const,
       data: points.map((p) => p.period),
@@ -37,18 +75,22 @@ export default function DevicePowerTrendChart({ chartId, isHighlighted }: Props)
           return parts[1] ? `${parts[1]}月` : v;
         },
         rotate: 30,
+        fontSize: 11,
       },
     },
     yAxis: [
       {
         type: 'value' as const,
-        name: '耗电/占比',
+        name: '充电异常数',
         position: 'left' as const,
+        nameTextStyle: { fontSize: 11 },
       },
       {
         type: 'value' as const,
-        name: '设备数',
+        name: '高耗电占比(%)',
         position: 'right' as const,
+        axisLabel: { formatter: (v: number) => `${(v * 100).toFixed(0)}%` },
+        nameTextStyle: { fontSize: 11 },
       },
     ],
     tooltip: {
@@ -58,32 +100,18 @@ export default function DevicePowerTrendChart({ chartId, isHighlighted }: Props)
         const pt = points[idx];
         const lines = [`${pt.period}（${pt.dateRange}）`];
         params.forEach((p) => {
-          lines.push(`${p.seriesName}：${p.value}`);
+          const isRatio = p.seriesName.includes('占比');
+          const val = isRatio ? `${((p.value as number) * 100).toFixed(1)}%` : String(p.value);
+          lines.push(`${p.seriesName}：${val}`);
         });
         return lines.join('<br/>');
       },
     },
     series: [
       {
-        name: '日耗电量(度)',
-        type: 'line' as const,
-        yAxisIndex: 0,
-        data: points.map((p) => p.dailyPowerConsumption),
-        smooth: true,
-        color: '#58a6ff',
-      },
-      {
-        name: '高耗电占比',
-        type: 'line' as const,
-        yAxisIndex: 0,
-        data: points.map((p) => p.highPowerRatio),
-        smooth: true,
-        color: '#e3b341',
-      },
-      {
         name: '充电异常设备数',
         type: 'bar' as const,
-        yAxisIndex: 1,
+        yAxisIndex: 0,
         data: points.map((p) => p.chargingAbnormalCount),
         barMaxWidth: 20,
         itemStyle: {
@@ -92,6 +120,14 @@ export default function DevicePowerTrendChart({ chartId, isHighlighted }: Props)
             return getAlertLevel('chargingAbnormalCount', val) === 'red' ? '#f85149' : '#bc8cff';
           },
         },
+      },
+      {
+        name: '高耗电占比',
+        type: 'line' as const,
+        yAxisIndex: 1,
+        data: points.map((p) => p.highPowerRatio),
+        smooth: true,
+        color: '#e3b341',
       },
     ],
   };
@@ -121,12 +157,15 @@ export default function DevicePowerTrendChart({ chartId, isHighlighted }: Props)
           ]}
         />
       </div>
-      <ReactECharts
-        option={option}
-        style={{ height: 280 }}
-        onEvents={{ click: handleClick }}
-        opts={{ renderer: 'svg' }}
-      />
+      <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 8 }}>
+        <ReactECharts option={distOption} style={{ height: 220 }} opts={{ renderer: 'svg' }} />
+        <ReactECharts
+          option={trendOption}
+          style={{ height: 220 }}
+          onEvents={{ click: handleClick }}
+          opts={{ renderer: 'svg' }}
+        />
+      </div>
     </div>
   );
 }

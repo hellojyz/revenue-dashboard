@@ -24,7 +24,8 @@ export interface DeviceFilters {
 
 export interface DeviceKPIItem {
   value: number | null;
-  changePercent: number | null;
+  changePercent: number | null;   // 环比
+  yoyPercent?: number | null;     // 同比
   sparkline: number[];
 }
 
@@ -33,8 +34,28 @@ export interface DeviceKPIData {
   activatedDevices: DeviceKPIItem;
   activeDevices: DeviceKPIItem;
   onlineRate: DeviceKPIItem;
-  churnRatio: DeviceKPIItem;
+  churnDevices: DeviceKPIItem;    // 流失设备数（本期值+流失率趋势）
   updatedAt: string;
+}
+
+// 供电健康：耗电分布（柱状图，静态分布数据）
+export interface PowerDistributionBucket {
+  label: string;   // 如 "0-20%"
+  ratio: number;   // 设备占比 0~1
+}
+
+export interface DevicePowerDistributionData {
+  buckets: PowerDistributionBucket[];
+}
+
+// 预览时长分布（柱状图，静态分布数据）
+export interface PreviewDurationBucket {
+  label: string;   // 如 "0-5s"
+  count: number;   // 设备数
+}
+
+export interface DevicePreviewDurationData {
+  buckets: PreviewDurationBucket[];
 }
 
 // 通用时序数据点（支持周/月粒度）
