@@ -70,7 +70,7 @@ export default function DeviceAccessTrendChart({ chartId, isHighlighted }: Props
 
   // 子图1：联网状态监控（双轴）
   const networkOption = {
-    grid: { top: 30, right: 70, bottom: 40, left: 60 },
+    grid: { top: 36, right: 80, bottom: 48, left: 64 },
     title: { text: '联网状态监控', textStyle: { fontSize: 12, color: '#8b949e' }, left: 0, top: 4 },
     legend: { top: 4, right: 0, data: ['首次配网成功率', 'WiFi配网成功率', 'SD卡丢失设备数'], textStyle: { fontSize: 10 } },
     xAxis: {
@@ -148,7 +148,7 @@ export default function DeviceAccessTrendChart({ chartId, isHighlighted }: Props
   // 子图2：设备预览时长分布（柱状图）
   const currentBuckets = previewDurationByNetwork[networkType];
   const previewOption = {
-    grid: { top: 30, right: 20, bottom: 40, left: 70 },
+    grid: { top: 36, right: 24, bottom: 36, left: 72 },
     title: { text: '设备预览时长分布', textStyle: { fontSize: 12, color: '#8b949e' }, left: 0, top: 4 },
     xAxis: {
       type: 'category' as const,
@@ -199,41 +199,45 @@ export default function DeviceAccessTrendChart({ chartId, isHighlighted }: Props
       className={`${styles.chartCard} ${isHighlighted ? styles.highlighted : ''}`}
       data-chart-id={chartId}
     >
-      <div className={styles.chartTitle}>接入与体验健康</div>
-      <div className={styles.chartControls} style={{ display: 'flex', gap: 12, alignItems: 'center' }}>
-        <Radio.Group
-          value={granularity}
-          onChange={(e) => setGranularity(e.target.value)}
-          size="small"
-          optionType="button"
-          buttonStyle="solid"
-          options={[
-            { value: 'day', label: '日' },
-            { value: 'week', label: '周' },
-            { value: 'month', label: '月' },
-          ]}
-        />
-        <Radio.Group
-          value={networkType}
-          onChange={(e) => setNetworkType(e.target.value)}
-          size="small"
-          optionType="button"
-          buttonStyle="solid"
-          options={[
-            { value: 'all', label: '全部' },
-            { value: '4g', label: '4G' },
-            { value: 'non4g', label: '非4G' },
-          ]}
-        />
+      <div className={styles.chartHeader}>
+        <div className={styles.chartTitle}>接入与体验健康</div>
+        <div className={styles.chartControls}>
+          <Radio.Group
+            value={granularity}
+            onChange={(e) => setGranularity(e.target.value)}
+            size="small"
+            optionType="button"
+            buttonStyle="solid"
+            options={[
+              { value: 'day', label: '日' },
+              { value: 'week', label: '周' },
+              { value: 'month', label: '月' },
+            ]}
+          />
+          <Radio.Group
+            value={networkType}
+            onChange={(e) => setNetworkType(e.target.value)}
+            size="small"
+            optionType="button"
+            buttonStyle="solid"
+            options={[
+              { value: 'all', label: '全部' },
+              { value: '4g', label: '4G' },
+              { value: 'non4g', label: '非4G' },
+            ]}
+          />
+        </div>
       </div>
-      <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 8 }}>
+      <div style={{ display: 'flex', flexDirection: 'column', gap: 12 }}>
         <ReactECharts
           option={networkOption}
-          style={{ height: 220 }}
+          style={{ height: 200, width: '100%' }}
           onEvents={{ click: handleClick }}
           opts={{ renderer: 'svg' }}
         />
-        <ReactECharts option={previewOption} style={{ height: 220 }} opts={{ renderer: 'svg' }} />
+        <div style={{ borderTop: '1px solid #30363d', paddingTop: 8 }}>
+          <ReactECharts option={previewOption} style={{ height: 200, width: '100%' }} opts={{ renderer: 'svg' }} />
+        </div>
       </div>
     </div>
   );

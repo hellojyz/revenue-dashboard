@@ -5,23 +5,31 @@
   box-shadow: 0 1px 4px rgba(0, 0, 0, 0.08);
   border: 2px solid transparent;
   transition: border-color 0.2s;
-  position: relative;
 }
 
 .chartCard.highlighted {
   border-color: #3fb950;
 }
 
+.chartHeader {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 8px;
+  flex-wrap: wrap;
+  gap: 6px;
+}
+
 .chartTitle {
   font-size: 14px;
   font-weight: 600;
   color: #333;
-  margin-bottom: 4px;
 }
 
+/* 兼容旧的绝对定位写法，保留但不再推荐 */
 .chartControls {
-  position: absolute;
-  top: 12px;
-  right: 16px;
-  z-index: 10;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex-shrink: 0;
 }

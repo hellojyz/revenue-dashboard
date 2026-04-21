@@ -93,7 +93,9 @@ export default function DeviceScaleTrendChart({ chartId, isHighlighted }: Props)
       className={`${styles.chartCard} ${isHighlighted ? styles.highlighted : ''}`}
       data-chart-id={chartId}
     >
-      <div className={styles.chartTitle}>规模-激活-活跃趋势</div>
+      <div className={styles.chartHeader}>
+        <div className={styles.chartTitle}>规模-激活-活跃趋势</div>
+      </div>
       <ReactECharts
         option={option}
         style={{ height: 280 }}

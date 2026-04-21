@@ -119,20 +119,22 @@ export default function DeviceOnlineTrendChart({ chartId, isHighlighted }: Props
       className={`${styles.chartCard} ${isHighlighted ? styles.highlighted : ''}`}
       data-chart-id={chartId}
     >
-      <div className={styles.chartTitle}>在线稳定性趋势</div>
-      <div className={styles.chartControls}>
-        <Radio.Group
-          value={granularity}
-          onChange={(e) => setGranularity(e.target.value)}
-          size="small"
-          optionType="button"
-          buttonStyle="solid"
-          options={[
-            { value: 'day', label: '日' },
-            { value: 'week', label: '周' },
-            { value: 'month', label: '月' },
-          ]}
-        />
+      <div className={styles.chartHeader}>
+        <div className={styles.chartTitle}>在线稳定性趋势</div>
+        <div className={styles.chartControls}>
+          <Radio.Group
+            value={granularity}
+            onChange={(e) => setGranularity(e.target.value)}
+            size="small"
+            optionType="button"
+            buttonStyle="solid"
+            options={[
+              { value: 'day', label: '日' },
+              { value: 'week', label: '周' },
+              { value: 'month', label: '月' },
+            ]}
+          />
+        </div>
       </div>
       <ReactECharts
         option={option}

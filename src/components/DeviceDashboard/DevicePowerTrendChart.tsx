@@ -28,7 +28,7 @@ export default function DevicePowerTrendChart({ chartId, isHighlighted }: Props)
 
   // 子图1：日耗电量分布（柱状图，静态分布数据）
   const distOption = {
-    grid: { top: 30, right: 20, bottom: 40, left: 60 },
+    grid: { top: 36, right: 24, bottom: 36, left: 64 },
     title: { text: '日耗电量分布', textStyle: { fontSize: 12, color: '#8b949e' }, left: 0, top: 4 },
     xAxis: {
       type: 'category' as const,
@@ -63,7 +63,7 @@ export default function DevicePowerTrendChart({ chartId, isHighlighted }: Props)
 
   // 子图2：充电异常设备数 + 高耗电占比（双轴折线/柱线）
   const trendOption = {
-    grid: { top: 30, right: 70, bottom: 40, left: 60 },
+    grid: { top: 36, right: 80, bottom: 48, left: 64 },
     title: { text: '充电异常 & 高耗电占比', textStyle: { fontSize: 12, color: '#8b949e' }, left: 0, top: 4 },
     legend: { top: 4, right: 0, data: ['充电异常设备数', '高耗电占比'], textStyle: { fontSize: 11 } },
     xAxis: {
@@ -142,29 +142,33 @@ export default function DevicePowerTrendChart({ chartId, isHighlighted }: Props)
       className={`${styles.chartCard} ${isHighlighted ? styles.highlighted : ''}`}
       data-chart-id={chartId}
     >
-      <div className={styles.chartTitle}>供电健康趋势</div>
-      <div className={styles.chartControls}>
-        <Radio.Group
-          value={granularity}
-          onChange={(e) => setGranularity(e.target.value)}
-          size="small"
-          optionType="button"
-          buttonStyle="solid"
-          options={[
-            { value: 'day', label: '日' },
-            { value: 'week', label: '周' },
-            { value: 'month', label: '月' },
-          ]}
-        />
+      <div className={styles.chartHeader}>
+        <div className={styles.chartTitle}>供电健康趋势</div>
+        <div className={styles.chartControls}>
+          <Radio.Group
+            value={granularity}
+            onChange={(e) => setGranularity(e.target.value)}
+            size="small"
+            optionType="button"
+            buttonStyle="solid"
+            options={[
+              { value: 'day', label: '日' },
+              { value: 'week', label: '周' },
+              { value: 'month', label: '月' },
+            ]}
+          />
+        </div>
       </div>
-      <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 8 }}>
-        <ReactECharts option={distOption} style={{ height: 220 }} opts={{ renderer: 'svg' }} />
-        <ReactECharts
-          option={trendOption}
-          style={{ height: 220 }}
-          onEvents={{ click: handleClick }}
-          opts={{ renderer: 'svg' }}
-        />
+      <div style={{ display: 'flex', flexDirection: 'column', gap: 12 }}>
+        <ReactECharts option={distOption} style={{ height: 200, width: '100%' }} opts={{ renderer: 'svg' }} />
+        <div style={{ borderTop: '1px solid #30363d', paddingTop: 8 }}>
+          <ReactECharts
+            option={trendOption}
+            style={{ height: 200, width: '100%' }}
+            onEvents={{ click: handleClick }}
+            opts={{ renderer: 'svg' }}
+          />
+        </div>
       </div>
     </div>
   );
