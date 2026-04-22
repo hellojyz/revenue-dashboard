@@ -146,12 +146,8 @@ const totalForDist = 1210000;
 
 const distributionMap: Record<DistributionDimension, { label: string; value: number }[]> = {
   model: [
-    { label: '摄像头A', value: Math.round(totalForDist * 0.28) },
-    { label: '摄像头B', value: Math.round(totalForDist * 0.22) },
-    { label: '门铃Pro', value: Math.round(totalForDist * 0.18) },
-    { label: '室内Mini', value: Math.round(totalForDist * 0.15) },
-    { label: '太阳能款', value: Math.round(totalForDist * 0.10) },
-    { label: '其他',    value: Math.round(totalForDist * 0.07) },
+    { label: 'Bell B9T', value: Math.round(totalForDist * 0.55) },
+    { label: 'Bell B9F', value: Math.round(totalForDist * 0.45) },
   ],
   region: [
     { label: '中国',     value: Math.round(totalForDist * 0.35) },

@@ -40,10 +40,8 @@ const CHANNEL_OPTIONS = [
 ];
 
 const MODEL_OPTIONS = [
-  { value: 'camera_a', label: '摄像头A' },
-  { value: 'camera_b', label: '摄像头B' },
-  { value: 'doorbell', label: '门铃Pro' },
-  { value: 'mini',     label: '室内Mini' },
+  { value: 'bell_b9t', label: 'Bell B9T' },
+  { value: 'bell_b9f', label: 'Bell B9F' },
 ];
 
 const FIRMWARE_OPTIONS = [
