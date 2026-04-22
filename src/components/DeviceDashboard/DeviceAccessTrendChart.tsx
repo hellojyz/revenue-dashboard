@@ -70,8 +70,8 @@ export default function DeviceAccessTrendChart({ chartId, isHighlighted }: Props
 
   // 子图1：联网状态监控（双轴）
   const networkOption = {
-    grid: { top: 36, right: 80, bottom: 48, left: 64 },
-    legend: { top: 4, right: 0, data: ['首次配网成功率', 'WiFi配网成功率', 'SD卡丢失设备数'], textStyle: { fontSize: 10 } },
+    grid: { top: 48, right: 80, bottom: 48, left: 64 },
+    legend: { top: 8, right: 0, data: ['首次配网成功率', 'WiFi配网成功率', 'SD卡丢失设备数'], textStyle: { fontSize: 10 } },
     xAxis: {
       type: 'category' as const,
       data: points.map((p) => p.period),
@@ -147,7 +147,7 @@ export default function DeviceAccessTrendChart({ chartId, isHighlighted }: Props
   // 子图2：设备预览时长分布（柱状图）
   const currentBuckets = previewDurationByNetwork[networkType];
   const previewOption = {
-    grid: { top: 36, right: 24, bottom: 36, left: 72 },
+    grid: { top: 16, right: 24, bottom: 36, left: 72 },
     xAxis: {
       type: 'category' as const,
       data: currentBuckets.map((b) => b.label),
@@ -226,19 +226,19 @@ export default function DeviceAccessTrendChart({ chartId, isHighlighted }: Props
           />
         </div>
       </div>
-      <div style={{ display: 'flex', flexDirection: 'column', gap: 12 }}>
+      <div style={{ display: 'flex', flexDirection: 'column', gap: 16 }}>
         <div>
-          <div style={{ fontSize: 12, color: '#8b949e', marginBottom: 4, fontWeight: 500 }}>联网状态监控</div>
+          <div style={{ fontSize: 12, color: '#8b949e', marginBottom: 6, fontWeight: 500 }}>联网状态监控</div>
           <ReactECharts
             option={networkOption}
-            style={{ height: 200, width: '100%' }}
+            style={{ height: 240, width: '100%' }}
             onEvents={{ click: handleClick }}
             opts={{ renderer: 'svg' }}
           />
         </div>
-        <div style={{ borderTop: '1px solid #f0f0f0', paddingTop: 8 }}>
-          <div style={{ fontSize: 12, color: '#8b949e', marginBottom: 4, fontWeight: 500 }}>设备预览时长分布</div>
-          <ReactECharts option={previewOption} style={{ height: 200, width: '100%' }} opts={{ renderer: 'svg' }} />
+        <div style={{ borderTop: '1px solid #f0f0f0', paddingTop: 12 }}>
+          <div style={{ fontSize: 12, color: '#8b949e', marginBottom: 6, fontWeight: 500 }}>设备预览时长分布</div>
+          <ReactECharts option={previewOption} style={{ height: 240, width: '100%' }} opts={{ renderer: 'svg' }} />
         </div>
       </div>
     </div>
