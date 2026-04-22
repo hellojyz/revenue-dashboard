@@ -1,0 +1,70 @@
+.panel {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  height: 100%;
+  overflow-y: auto;
+}
+
+.section {
+  background: #fff;
+  border-radius: 8px;
+  padding: 14px 16px;
+  box-shadow: 0 1px 4px rgba(0, 0, 0, 0.08);
+}
+
+.sectionHeader {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 10px;
+  flex-wrap: wrap;
+}
+
+.sectionTitle {
+  font-size: 13px;
+  font-weight: 600;
+  color: #333;
+  flex-shrink: 0;
+}
+
+.realtimeBadge {
+  font-size: 11px;
+  color: #3fb950;
+  background: rgba(63, 185, 80, 0.1);
+  padding: 2px 8px;
+  border-radius: 10px;
+  flex-shrink: 0;
+}
+
+.kpiRow {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 8px;
+}
+
+.kpiCard {
+  background: #f8fafc;
+  border-radius: 6px;
+  padding: 10px 12px;
+  text-align: center;
+}
+
+.kpiLabel {
+  font-size: 11px;
+  color: #8b949e;
+  margin-bottom: 4px;
+}
+
+.kpiValue {
+  font-size: 20px;
+  font-weight: 700;
+  line-height: 1.2;
+}
+
+.kpiUnit {
+  font-size: 12px;
+  font-weight: 400;
+  margin-left: 2px;
+  color: #8b949e;
+}

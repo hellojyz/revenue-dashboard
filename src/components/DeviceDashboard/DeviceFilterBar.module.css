@@ -26,3 +26,10 @@
   gap: 8px;
   margin-left: auto;
 }
+
+.divider {
+  width: 1px;
+  height: 24px;
+  background: #e8e8e8;
+  flex-shrink: 0;
+}

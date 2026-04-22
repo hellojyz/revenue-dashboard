@@ -33,11 +33,11 @@ const TOPICS = [
   },
 ];
 
-export default function DeviceTopicEntries() {
+export default function DeviceTopicEntries({ compact = false }: { compact?: boolean }) {
   return (
-    <div className={styles.container}>
-      <div className={styles.title}>专题诊断入口</div>
-      <div className={styles.list}>
+    <div className={compact ? '' : styles.container}>
+      {!compact && <div className={styles.title}>专题诊断入口</div>}
+      <div className={compact ? styles.listCompact : styles.list}>
         {TOPICS.map((topic) => (
           <div
             key={topic.name}
@@ -50,7 +50,7 @@ export default function DeviceTopicEntries() {
             <span className={styles.icon}>{topic.icon}</span>
             <div className={styles.info}>
               <span className={styles.name}>{topic.name}</span>
-              <span className={styles.desc}>{topic.desc}</span>
+              {!compact && <span className={styles.desc}>{topic.desc}</span>}
             </div>
             <span className={styles.arrow}>›</span>
           </div>

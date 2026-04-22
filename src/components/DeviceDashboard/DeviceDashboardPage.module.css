@@ -19,10 +19,11 @@
   min-height: 100vh;
 }
 
+/* 标题区 */
 .header {
   background: var(--device-header-bg);
   border-radius: 8px;
-  padding: 16px 20px;
+  padding: 14px 20px;
   display: flex;
   align-items: center;
   justify-content: space-between;
@@ -38,15 +39,22 @@
 }
 
 .title {
-  font-size: 20px;
+  font-size: 18px;
   font-weight: 700;
   color: #fff;
   margin: 0;
 }
 
 .subtitle {
-  font-size: 13px;
+  font-size: 12px;
   color: #8b949e;
+}
+
+.headerRight {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: 2px;
 }
 
 .updatedAt {
@@ -54,12 +62,68 @@
   color: #8b949e;
 }
 
-.bottomRow {
-  display: grid;
-  grid-template-columns: 3fr 2fr;
-  gap: 12px;
+.realtimeNote {
+  font-size: 11px;
+  color: #3fb950;
+  background: rgba(63, 185, 80, 0.1);
+  padding: 2px 8px;
+  border-radius: 10px;
 }
 
+/* 左右分栏主体 */
+.mainLayout {
+  display: grid;
+  grid-template-columns: 3fr 1.4fr;
+  gap: 12px;
+  align-items: start;
+}
+
+@media (max-width: 1200px) {
+  .mainLayout {
+    grid-template-columns: 1fr;
+  }
+}
+
+/* 分区标签 */
+.panelLabel {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 8px;
+}
+
+.panelLabelText {
+  font-size: 13px;
+  font-weight: 600;
+  color: #333;
+  padding: 2px 10px;
+  background: #e8f4fd;
+  border-left: 3px solid #1677ff;
+  border-radius: 0 4px 4px 0;
+}
+
+.panelLabelHint {
+  font-size: 11px;
+  color: #8b949e;
+}
+
+.leftPanel {
+  display: flex;
+  flex-direction: column;
+  gap: 0;
+  min-width: 0;
+}
+
+.rightPanel {
+  display: flex;
+  flex-direction: column;
+  gap: 0;
+  min-width: 0;
+  position: sticky;
+  top: 16px;
+}
+
+/* 错误状态 */
 .errorBox {
   display: flex;
   flex-direction: column;

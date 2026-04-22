@@ -68,3 +68,22 @@
   color: #bbb;
   flex-shrink: 0;
 }
+
+.listCompact {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 6px;
+}
+
+.listCompact .card {
+  padding: 8px 10px;
+  gap: 8px;
+}
+
+.listCompact .icon {
+  font-size: 16px;
+}
+
+.listCompact .name {
+  font-size: 12px;
+}

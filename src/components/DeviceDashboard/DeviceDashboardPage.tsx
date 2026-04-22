@@ -4,8 +4,7 @@ import LoadingState from '../common/LoadingState';
 import DeviceFilterBar from './DeviceFilterBar';
 import DeviceKPIRow from './DeviceKPIRow';
 import DeviceTrendGrid from './DeviceTrendGrid';
-import DeviceDistributionChart from './DeviceDistributionChart';
-import DeviceTopicEntries from './DeviceTopicEntries';
+import DeviceRealtimePanel from './DeviceRealtimePanel';
 import styles from './DeviceDashboardPage.module.css';
 
 function formatUpdatedAt(isoStr: string | null | undefined): string {
@@ -16,7 +15,7 @@ function formatUpdatedAt(isoStr: string | null | undefined): string {
   const day = String(d.getDate()).padStart(2, '0');
   const h = String(d.getHours()).padStart(2, '0');
   const min = String(d.getMinutes()).padStart(2, '0');
-  return `数据更新时间：${y}-${m}-${day} ${h}:${min}`;
+  return `统计截止：${y}-${m}-${day} ${h}:${min}`;
 }
 
 export default function DeviceDashboardPage() {
@@ -43,40 +42,53 @@ export default function DeviceDashboardPage() {
 
   return (
     <div className={styles.page}>
-      {/* 第1行：标题区 */}
+      {/* 标题区 */}
       <div className={styles.header}>
         <div className={styles.titleRow}>
           <h1 className={styles.title}>一级驾驶舱（设备域）</h1>
           <span className={styles.subtitle}>面向设备负责人 · 结果监控 + 健康解释护栏</span>
         </div>
-        {data?.updatedAt && (
-          <span className={styles.updatedAt}>{formatUpdatedAt(data.updatedAt)}</span>
-        )}
+        <div className={styles.headerRight}>
+          {data?.updatedAt && (
+            <span className={styles.updatedAt}>{formatUpdatedAt(data.updatedAt)}</span>
+          )}
+          <span className={styles.realtimeNote}>右侧实时数据每5分钟自动刷新</span>
+        </div>
       </div>
 
-      {/* 第2行：筛选器 */}
+      {/* 全局筛选器 */}
       <ErrorBoundary>
         <DeviceFilterBar />
       </ErrorBoundary>
 
-      {/* 第3行：KPI卡片 */}
+      {/* KPI卡片行（截面快照，取截止日） */}
       <ErrorBoundary>
         <DeviceKPIRow />
       </ErrorBoundary>
 
-      {/* 第4-5行：趋势图 2x2 */}
-      <ErrorBoundary>
-        <DeviceTrendGrid />
-      </ErrorBoundary>
+      {/* 左右分栏主体 */}
+      <div className={styles.mainLayout}>
+        {/* 左侧：历史分析区（A类模块，受全局时间控制） */}
+        <div className={styles.leftPanel}>
+          <div className={styles.panelLabel}>
+            <span className={styles.panelLabelText}>历史分析区</span>
+            <span className={styles.panelLabelHint}>受全局时间范围 / 粒度控制</span>
+          </div>
+          <ErrorBoundary>
+            <DeviceTrendGrid />
+          </ErrorBoundary>
+        </div>
 
-      {/* 第6行：分布图 + 专题入口 */}
-      <div className={styles.bottomRow}>
-        <ErrorBoundary>
-          <DeviceDistributionChart />
-        </ErrorBoundary>
-        <ErrorBoundary>
-          <DeviceTopicEntries />
-        </ErrorBoundary>
+        {/* 右侧：独立监控区（B/C类模块，不受全局时间范围控制） */}
+        <div className={styles.rightPanel}>
+          <div className={styles.panelLabel}>
+            <span className={styles.panelLabelText}>实时监控区</span>
+            <span className={styles.panelLabelHint}>独立时间 · 继承业务筛选</span>
+          </div>
+          <ErrorBoundary>
+            <DeviceRealtimePanel />
+          </ErrorBoundary>
+        </div>
       </div>
     </div>
   );
