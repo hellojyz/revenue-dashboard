@@ -8,7 +8,7 @@ export type AppVersion = string;
 export type PowerType = 'all' | 'wired' | 'low_power';
 export type LifecycleStage = 'new' | 'growth' | 'mature' | 'decline';
 export type DistributionDimension = 'model' | 'region' | 'channel' | 'lifecycle';
-export type TimeRange = 'last_12_months' | 'last_6_months' | 'last_3_months' | 'custom';
+export type TimeRange = 'last_7_days' | 'last_12_months' | 'last_6_months' | 'last_3_months' | 'custom';
 
 export interface DeviceFilters {
   timeRange: TimeRange;
