@@ -71,7 +71,6 @@ export default function DeviceAccessTrendChart({ chartId, isHighlighted }: Props
   // 子图1：联网状态监控（双轴）
   const networkOption = {
     grid: { top: 36, right: 80, bottom: 48, left: 64 },
-    title: { text: '联网状态监控', textStyle: { fontSize: 12, color: '#8b949e' }, left: 0, top: 4 },
     legend: { top: 4, right: 0, data: ['首次配网成功率', 'WiFi配网成功率', 'SD卡丢失设备数'], textStyle: { fontSize: 10 } },
     xAxis: {
       type: 'category' as const,
@@ -149,7 +148,6 @@ export default function DeviceAccessTrendChart({ chartId, isHighlighted }: Props
   const currentBuckets = previewDurationByNetwork[networkType];
   const previewOption = {
     grid: { top: 36, right: 24, bottom: 36, left: 72 },
-    title: { text: '设备预览时长分布', textStyle: { fontSize: 12, color: '#8b949e' }, left: 0, top: 4 },
     xAxis: {
       type: 'category' as const,
       data: currentBuckets.map((b) => b.label),
@@ -229,13 +227,17 @@ export default function DeviceAccessTrendChart({ chartId, isHighlighted }: Props
         </div>
       </div>
       <div style={{ display: 'flex', flexDirection: 'column', gap: 12 }}>
-        <ReactECharts
-          option={networkOption}
-          style={{ height: 200, width: '100%' }}
-          onEvents={{ click: handleClick }}
-          opts={{ renderer: 'svg' }}
-        />
-        <div style={{ borderTop: '1px solid #30363d', paddingTop: 8 }}>
+        <div>
+          <div style={{ fontSize: 12, color: '#8b949e', marginBottom: 4, fontWeight: 500 }}>联网状态监控</div>
+          <ReactECharts
+            option={networkOption}
+            style={{ height: 200, width: '100%' }}
+            onEvents={{ click: handleClick }}
+            opts={{ renderer: 'svg' }}
+          />
+        </div>
+        <div style={{ borderTop: '1px solid #f0f0f0', paddingTop: 8 }}>
+          <div style={{ fontSize: 12, color: '#8b949e', marginBottom: 4, fontWeight: 500 }}>设备预览时长分布</div>
           <ReactECharts option={previewOption} style={{ height: 200, width: '100%' }} opts={{ renderer: 'svg' }} />
         </div>
       </div>
